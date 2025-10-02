@@ -48,18 +48,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     public Vector2 HandleMovement()
     {
-        Vector2 playerMovement = Vector2.zero;
-
-        playerMovement = PlayerActionMap.Move.ReadValue<Vector2>();
+        Vector2 playerMovement = PlayerActionMap.Move.ReadValue<Vector2>();
 
         return playerMovement;
     }
 
     public Vector2 HandleRotation()
     {
-        Vector2 rotationMovement = Vector2.zero;
-
-        rotationMovement = PlayerActionMap.Look.ReadValue<Vector2>();
+        Vector2 rotationMovement = PlayerActionMap.Look.ReadValue<Vector2>();
 
         return rotationMovement;
     }
