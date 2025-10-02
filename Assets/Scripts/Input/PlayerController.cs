@@ -12,6 +12,10 @@ public class PlayerController : MonoBehaviour
     public float MovementSpeed
     { get; private set; } = 1.0f;
 
+    [field: SerializeField]
+    public float RotationSpeed
+    { get; private set; } = 1.0f;
+
     private void Awake()
     {
         InitialiseVariables();
@@ -27,6 +31,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         HandleMovement();
+        HandleRotation();
     }
 
     public void InitialiseVariables()
@@ -57,6 +62,20 @@ public class PlayerController : MonoBehaviour
             Vector3 gloablMovement = new Vector3(InputHandler.MovementInput.x, 0, InputHandler.MovementInput.y);
 
             CharacterControllerComp.Move(transform.TransformDirection(gloablMovement) * Time.deltaTime * MovementSpeed);
+        }
+        else
+        {
+            Debug.LogError("CharacterControllerComp is null or player input handler is null");
+        }
+    }
+
+    public void HandleRotation()
+    {
+        if (CharacterControllerComp != null & InputHandler != null)
+        {
+            Vector3 globalRotation = new Vector3(0, InputHandler.RotationInput.x, 0);
+
+            transform.Rotate(globalRotation * Time.deltaTime * RotationSpeed);
         }
         else
         {

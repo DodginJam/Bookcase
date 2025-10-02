@@ -12,7 +12,7 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 MovementInput
     { get; private set; }
 
-    public Vector2 CameraInput
+    public Vector2 RotationInput
     { get; private set; }
 
     private void Awake()
@@ -43,7 +43,7 @@ public class PlayerInputHandler : MonoBehaviour
     {
         MovementInput = HandleMovement();
 
-        CameraInput = HandleCamera();
+        RotationInput = HandleRotation();
     }
 
     public Vector2 HandleMovement()
@@ -55,12 +55,12 @@ public class PlayerInputHandler : MonoBehaviour
         return playerMovement;
     }
 
-    public Vector2 HandleCamera()
+    public Vector2 HandleRotation()
     {
-        Vector2 cameraMovement = Vector2.zero;
+        Vector2 rotationMovement = Vector2.zero;
 
-        cameraMovement = PlayerActionMap.Look.ReadValue<Vector2>();
+        rotationMovement = PlayerActionMap.Look.ReadValue<Vector2>();
 
-        return cameraMovement;
+        return rotationMovement;
     }
 }
