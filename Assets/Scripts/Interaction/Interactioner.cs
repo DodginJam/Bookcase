@@ -39,9 +39,25 @@ public class Interactioner : MonoBehaviour
     {
         if (Physics.Raycast(InteractionTransform.position, InteractionTransform.forward, out RaycastHit hit))
         {
-            if (hit.transform.TryGetComponent(out IInteractable interactable))
+            // First check if their is a rigidbody on the hit, and if there is use that as the point to locate an interactable interface.
+            if (hit.rigidbody != null)
             {
-                interactable.TryInteraction(transform, hit);
+                if (hit.rigidbody.transform.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.TryInteraction(transform, hit);
+                }
+
+                Debug.Log("Rigidbody found with collider hit.");
+            }
+            // Else just look directly at the collider to check for whether the object contains an interatable interface.
+            else
+            {
+                if (hit.collider.transform.TryGetComponent(out IInteractable interactable))
+                {
+                    interactable.TryInteraction(transform, hit);
+                }
+
+                Debug.Log("Just collider hit - no rigidbody");
             }
         }
     }
