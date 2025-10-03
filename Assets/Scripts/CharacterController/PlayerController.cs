@@ -2,6 +2,9 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
+    /// <summary>
+    /// Reference to the input manager for the player.
+    /// </summary>
     public PlayerInputHandler InputHandler
     {  get; private set; }
 
@@ -16,9 +19,15 @@ public class PlayerController : MonoBehaviour
     public float RotationSpeed
     { get; private set; } = 1.0f;
 
+    /// <summary>
+    /// Contains the velocity calculated from the movement inputs, which is applied to the character controllers overall movement per frame.
+    /// </summary>
     public Vector3 CharacterMovementVelocity
     { get; private set; }
 
+    /// <summary>
+    /// Contains the velocity calculated from the forces applied to the character, which is applied to the character controllers overall movement per frame.
+    /// </summary>
     public Vector3 CharacterForcesVelocity
     { get; private set; }
 
@@ -37,10 +46,16 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    public bool GroundedStateChange
-    {  get; private set; }
+    /// <summary>
+    /// Flag that is set for when the IsGrounded setter is changed.
+    /// </summary>
+    private bool GroundedStateChange
+    { get; set; }
 
-    [field: SerializeField]
+    /// <summary>
+    /// The layers then count as walkable on for the IsGrounded status of the character.
+    /// </summary>
+    [field: SerializeField, Tooltip("The layers then count as walkable on for the IsGrounded status of the character.")]
     public LayerMask WalkableLayers
     { get; private set; } 
 
@@ -89,6 +104,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies the movement inputs to the desired movement directions of the character controller and store this movement in the Character Movement Velocity.
+    /// </summary>
     public void HandleMovement()
     {
         // Reset the movement velocity so the new inputs override the last inputs.
@@ -97,10 +115,10 @@ public class PlayerController : MonoBehaviour
         if (CharacterControllerComp != null & InputHandler != null)
         {
             // Only output the X and Z axis of movement, taken from the Vector2 of the input movement.
-            Vector3 gloablMovement = new Vector3(InputHandler.MovementInput.x, 0, InputHandler.MovementInput.y);
+            Vector3 globalMovement = new Vector3(InputHandler.MovementInput.x, 0, InputHandler.MovementInput.y);
 
             // Translate the direction of movement locally to the characters current orientation.
-            CharacterMovementVelocity = MovementSpeed * Time.deltaTime * transform.TransformDirection(gloablMovement);
+            CharacterMovementVelocity = MovementSpeed * Time.deltaTime * transform.TransformDirection(globalMovement);
         }
         else
         {
@@ -108,6 +126,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Applies rotation to the character controller via the inputs recevied from the player mouse input.
+    /// </summary>
     public void HandleRotation()
     {
         if (CharacterControllerComp != null & InputHandler != null)
@@ -115,7 +136,7 @@ public class PlayerController : MonoBehaviour
             // The player object should rotate on only the Y axis to allow change in X and Z movement direction.
             Vector3 globalRotation = new Vector3(0, InputHandler.RotationInput.x, 0);
 
-            transform.Rotate(globalRotation * Time.deltaTime * RotationSpeed);
+            transform.Rotate(RotationSpeed * Time.deltaTime * globalRotation);
         }
         else
         {
@@ -123,6 +144,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Simulates the downward force to applt the character controller.
+    /// </summary>
     public void SimulateGravity()
     {
         // The bool is to flag if the player should have their gravity reset.
@@ -158,6 +182,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Using SphereCasts, check if the character controller is in contact with the ground.
+    /// </summary>
     public void UpdateGroundedStatus()
     {
         float sphereCastRadius = CharacterControllerComp.radius;

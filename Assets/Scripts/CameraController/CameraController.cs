@@ -9,12 +9,21 @@ public class CameraController : MonoBehaviour
     public Transform FirstPersonCameraHolder
     { get; private set; }
 
+    /// <summary>
+    /// Keeps tracks of the current pitch angle of the gameobject the camera is to match the rotation of.
+    /// </summary>
     public float CameraPitch
     { get; private set; }
 
+    /// <summary>
+    /// Whether the camera is a first person or third person camera.
+    /// </summary>
     public CameraPositionState CameraPosition
     { get; private set; }
 
+    /// <summary>
+    /// Reference to the player controller and the player input system contained within.
+    /// </summary>
     public PlayerController PlayerController
     { get; private set; }
 
@@ -57,12 +66,6 @@ public class CameraController : MonoBehaviour
         }
     }
 
-    public enum CameraPositionState
-    {
-        FirstPerson,
-        ThirdPerson
-    }
-
     public void UpdateCameraRotation(Transform cameraHolder, CameraPositionState cameraPosition)
     {
         if (cameraPosition == CameraPositionState.FirstPerson)
@@ -79,5 +82,14 @@ public class CameraController : MonoBehaviour
                 Debug.LogError("CharacterControllerComp is null or player input handler is null");
             }
         }
+    }
+
+    /// <summary>
+    /// The camera state affecting it's position and how it is rotated and controlled.
+    /// </summary>
+    public enum CameraPositionState
+    {
+        FirstPerson,
+        ThirdPerson
     }
 }
