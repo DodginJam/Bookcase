@@ -72,7 +72,7 @@ public class CameraController : MonoBehaviour
                 CameraPitch -= PlayerController.InputHandler.RotationInput.y * Time.deltaTime * PlayerController.RotationSpeed;
                 CameraPitch = Mathf.Clamp(CameraPitch, -85, 85);
 
-                FirstPersonCameraHolder.transform.localRotation = Quaternion.Euler(CameraPitch, FirstPersonCameraHolder.transform.localRotation.y, FirstPersonCameraHolder.transform.localRotation.z);
+                cameraHolder.transform.localRotation = Quaternion.Euler(CameraPitch, cameraHolder.transform.localRotation.y, cameraHolder.transform.localRotation.z);
             }
             else
             {
