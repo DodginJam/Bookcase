@@ -57,19 +57,15 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-        HandleRotation();
-    }
-
-    // Update is called once per frame
-    void FixedUpdate()
-    {
         HandleMovement();
+
+        HandleRotation();
 
         UpdateGroundedStatus();
 
         SimulateGravity();
 
-        CharacterControllerComp.Move(CharacterMovementVelocity + (CharacterForcesVelocity * Time.fixedDeltaTime));
+        CharacterControllerComp.Move(CharacterMovementVelocity + (CharacterForcesVelocity * Time.deltaTime));
     }
 
     public void InitialiseVariables()
@@ -104,7 +100,7 @@ public class PlayerController : MonoBehaviour
             Vector3 gloablMovement = new Vector3(InputHandler.MovementInput.x, 0, InputHandler.MovementInput.y);
 
             // Translate the direction of movement locally to the characters current orientation.
-            CharacterMovementVelocity = MovementSpeed * Time.fixedDeltaTime * transform.TransformDirection(gloablMovement);
+            CharacterMovementVelocity = MovementSpeed * Time.deltaTime * transform.TransformDirection(gloablMovement);
         }
         else
         {
@@ -157,19 +153,16 @@ public class PlayerController : MonoBehaviour
             }
             else
             {
-                CharacterForcesVelocity += new Vector3(0, Physics.gravity.y * Time.fixedDeltaTime, 0);
+                CharacterForcesVelocity += new Vector3(0, Physics.gravity.y * Time.deltaTime, 0);
             }
         }
     }
 
-    public float sphereCastRadius;
-    public Vector3 sphereCastOrigin;
-
     public void UpdateGroundedStatus()
     {
-        sphereCastRadius = CharacterControllerComp.radius;
+        float sphereCastRadius = CharacterControllerComp.radius;
         Vector3 sphereCastDirection = Vector3.down;
-        sphereCastOrigin = transform.position - new Vector3(0, (CharacterControllerComp.height / 2) - (sphereCastRadius), 0);
+        Vector3 sphereCastOrigin = transform.position - new Vector3(0, (CharacterControllerComp.height / 2) - (sphereCastRadius), 0);
 
         float sphereCastMaxDistance = 0.1f;
 
@@ -181,13 +174,8 @@ public class PlayerController : MonoBehaviour
         }
 
         // Debugging
-        Debug.DrawLine(transform.position, sphereCastOrigin, Color.red); // The origin point of the sphere cast from the transform centre.
+/*        Debug.DrawLine(transform.position, sphereCastOrigin, Color.red); // The origin point of the sphere cast from the transform centre.
         Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max distance.
-        Debug.Log($"Is Grounded: {isGrounded}");
-    }
-
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.DrawWireSphere(sphereCastOrigin, sphereCastRadius);
+        Debug.Log($"Is Grounded: {isGrounded}");*/
     }
 }
