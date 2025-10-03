@@ -1,4 +1,6 @@
+using System;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 [DefaultExecutionOrder(-1)]
 public class PlayerInputHandler : MonoBehaviour
@@ -15,6 +17,8 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 RotationInput
     { get; private set; }
 
+    public event Action Interaction;
+
     private void Awake()
     {
         if (InputManager == null)
@@ -29,6 +33,24 @@ public class PlayerInputHandler : MonoBehaviour
             {
                 PlayerActionMap = InputManager.InputActions.Player;
             }
+        }
+    }
+
+    private void OnEnable()
+    {
+        EnableInputListeners();
+    }
+
+    private void OnDisable()
+    {
+        DisableInputListeners();
+    }
+
+    void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            Interaction?.Invoke();
         }
     }
 
@@ -58,5 +80,21 @@ public class PlayerInputHandler : MonoBehaviour
         Vector2 rotationMovement = PlayerActionMap.Look.ReadValue<Vector2>();
 
         return rotationMovement;
+    }
+
+    public void EnableInputListeners()
+    {
+        PlayerActionMap.Interact.started += context =>
+        {
+            OnInteract(context);
+        };
+    }
+
+    public void DisableInputListeners()
+    {
+        PlayerActionMap.Interact.started -= context =>
+        {
+            OnInteract(context);
+        };
     }
 }

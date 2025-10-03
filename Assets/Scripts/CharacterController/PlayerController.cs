@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[RequireComponent(typeof(Interactioner))]
 public class PlayerController : MonoBehaviour
 {
     /// <summary>
@@ -18,6 +19,9 @@ public class PlayerController : MonoBehaviour
     [field: SerializeField]
     public float RotationSpeed
     { get; private set; } = 1.0f;
+
+    public Interactioner InteractionComp
+    { get; private set; }
 
     /// <summary>
     /// Contains the velocity calculated from the movement inputs, which is applied to the character controllers overall movement per frame.
@@ -70,6 +74,16 @@ public class PlayerController : MonoBehaviour
         
     }
 
+    private void OnEnable()
+    {
+        AssignEventListeners();
+    }
+
+    private void OnDisable()
+    {
+        DeassignEventListeners();
+    }
+
     private void Update()
     {
         HandleMovement();
@@ -101,6 +115,15 @@ public class PlayerController : MonoBehaviour
         else
         {
             Debug.LogError("Unable to locate a player input handler component on this transform.");
+        }
+
+        if (TryGetComponent<Interactioner>(out Interactioner interaction))
+        {
+            InteractionComp = interaction;
+        }
+        else
+        {
+            Debug.LogError("Unable to locate a interaction component on this transform.");
         }
     }
 
@@ -189,11 +212,13 @@ public class PlayerController : MonoBehaviour
     {
         float sphereCastRadius = CharacterControllerComp.radius;
         Vector3 sphereCastDirection = Vector3.down;
+
+        // The origin is at the base of the character controller minus the radius of the sphere cast, ensuring the spherecast and feet of controller capusle line up correctly.
         Vector3 sphereCastOrigin = transform.position - new Vector3(0, (CharacterControllerComp.height / 2) - (sphereCastRadius), 0);
 
         float sphereCastMaxDistance = 0.1f;
 
-        bool isGrounded = Physics.SphereCast(sphereCastOrigin, sphereCastRadius, sphereCastDirection, out RaycastHit info, sphereCastMaxDistance, WalkableLayers);
+        bool isGrounded = Physics.SphereCast(sphereCastOrigin, sphereCastRadius, sphereCastDirection, out _, sphereCastMaxDistance, WalkableLayers);
 
         if (isGrounded != IsGrounded)
         {
@@ -204,5 +229,27 @@ public class PlayerController : MonoBehaviour
 /*        Debug.DrawLine(transform.position, sphereCastOrigin, Color.red); // The origin point of the sphere cast from the transform centre.
         Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max distance.
         Debug.Log($"Is Grounded: {isGrounded}");*/
+    }
+
+    public void AssignEventListeners()
+    {
+        if (InputHandler != null)
+        {
+            if (InteractionComp != null)
+            {
+                InputHandler.Interaction += InteractionComp.Interact;
+            }
+        }
+    }
+
+    public void DeassignEventListeners()
+    {
+        if (InputHandler != null)
+        {
+            if (InteractionComp != null)
+            {
+                InputHandler.Interaction -= InteractionComp.Interact;
+            }
+        }
     }
 }
