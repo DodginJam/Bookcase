@@ -131,6 +131,7 @@ GameObject:
   - component: {fileID: 51209539}
   - component: {fileID: 51209540}
   - component: {fileID: 51209541}
+  - component: {fileID: 51209542}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Player
@@ -208,6 +209,19 @@ MonoBehaviour:
   <WalkableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
+--- !u!114 &51209542
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 51209537}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c888bce897b1d934caa4b332fe30d614, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <InteractionTransform>k__BackingField: {fileID: 1406573153}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -761,6 +775,7 @@ GameObject:
   - component: {fileID: 1281523443}
   - component: {fileID: 1281523442}
   - component: {fileID: 1281523441}
+  - component: {fileID: 1281523446}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -884,6 +899,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1281523446
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1281523440}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ae4252f93d53c00448f7f45fd8ad8fdf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  <InteractionDistance>k__BackingField: 3
+  <InteractionCentre>k__BackingField: 0
 --- !u!1 &1406573152
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,8 +923,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1406573153}
   m_Layer: 0
-  m_Name: Eyes
-  m_TagString: Untagged
+  m_Name: CameraHolder_FP
+  m_TagString: CameraHolder
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -928,7 +957,7 @@ GameObject:
   - component: {fileID: 1446252028}
   - component: {fileID: 1446252027}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Eyes
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
