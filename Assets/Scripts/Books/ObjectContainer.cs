@@ -120,7 +120,7 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
         // If there is not assigned contained object still and yet it should have one, spawned a new one.
         if (ShouldStartWithObjectSpawned && containedObject == null)
         {
-            containedObject = Instantiate(ContainedObjectPrefab, ContainerObjectPosition.position, Quaternion.identity, ContainerObjectPosition);
+            containedObject = Instantiate(ContainedObjectPrefab, ContainerObjectPosition.position, Quaternion.identity);
         }
 
         // Store the singular validate object as being stored if one exisits.
@@ -136,11 +136,27 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
     {
         StoredGameObject = gameObject;
 
+        StoredGameObject.transform.parent = ContainerObjectPosition;
+
         StoredGameObject.transform.SetPositionAndRotation(ContainerObjectPosition.transform.position, ContainerObjectPosition.transform.rotation);
 
         SetRigidBodyStatus(StoredGameObject, rigidBodyKinematicStatus);
 
         SetInteractableStatus(StoredGameObject, interactiveStatus);
+    }
+
+    public GameObject RemoveObjectFromContainer(bool rigidBodyKinematicStatus, bool interactiveStatus)
+    {
+        GameObject objectToRemove = StoredGameObject;
+        StoredGameObject = null;
+
+        objectToRemove.transform.parent = null;
+
+        SetRigidBodyStatus(objectToRemove, rigidBodyKinematicStatus);
+
+        SetInteractableStatus(objectToRemove, interactiveStatus);
+
+        return objectToRemove;
     }
 
     public void SetRigidBodyStatus(GameObject gameObject, bool setKinematic)

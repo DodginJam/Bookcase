@@ -7,21 +7,38 @@ public class BookContainer : ObjectContainer<Book>
     {
         if (StoredGameObject == null)
         {
-            Debug.Log("Book Container interacted with - it is empty");
+            Debug.Log("Container interacted with - it is empty");
 
             if (interactioner.Inventory != null)
             {
-                Debug.Log("Inventory hand has an object in it");
-
-                if (ValidateObjectForContainer(interactioner.Inventory.ObjectInHand, out GameObject validGameObject))
+                if (interactioner.Inventory.ObjectInHand != null)
                 {
-                    SetObjectIntoContainer(validGameObject, true, false);
+                    Debug.Log("Inventory hand has an object in it");
+
+                    if (ValidateObjectForContainer(interactioner.Inventory.ObjectInHand, out GameObject validGameObject))
+                    {
+                        interactioner.Inventory.TryRemoveObjectFromHand(true, false, Vector3.zero);
+
+                        SetObjectIntoContainer(validGameObject, true, false);
+                    }
                 }
             }
         }
-        else
+        else if (StoredGameObject != null)
         {
+            Debug.Log("Container interacted with - it contains an object");
 
+            if (interactioner.Inventory != null)
+            {
+                if (interactioner.Inventory.ObjectInHand == null)
+                {
+                    Debug.Log("Inventory hand is empty");
+
+                    GameObject removedGameObject = RemoveObjectFromContainer(true, false);
+
+                    interactioner.Inventory.TryAddObjectToHand(removedGameObject);
+                }
+            }
         }
     }
 
