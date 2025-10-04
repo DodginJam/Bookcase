@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Interactioner : MonoBehaviour
@@ -7,11 +8,15 @@ public class Interactioner : MonoBehaviour
     public Transform InteractionTransform
     { get; private set; }
 
+    [field: SerializeField]
+    public Inventory Inventory
+    { get; private set; }
+
     private void Awake()
     {
         if (InteractionTransform == null)
         {
-            if (ReturnTaggedTransform("CameraHolder", transform, out Transform taggedTransform))
+            if (ReturnTaggedTransform("InteractionFace", transform, out Transform taggedTransform))
             {
                 InteractionTransform = taggedTransform;
             }
@@ -19,6 +24,18 @@ public class Interactioner : MonoBehaviour
             {
                 Debug.LogError("The passed transform parent does not contain a child with the passed tag. No interaction transform aqquired. Defaulting to this transform.");
                 InteractionTransform = transform;
+            }
+        }
+
+        if (Inventory == null)
+        {
+            if (TryGetComponent<Inventory>(out Inventory inventory))
+            {
+                Inventory = inventory;
+            }
+            else
+            {
+                Inventory = this.AddComponent<Inventory>();
             }
         }
     }
@@ -35,7 +52,7 @@ public class Interactioner : MonoBehaviour
         
     }
 
-    public void Interact()
+    public void InteractRayCast()
     {
         if (Physics.Raycast(InteractionTransform.position, InteractionTransform.forward, out RaycastHit hit))
         {
@@ -45,7 +62,7 @@ public class Interactioner : MonoBehaviour
 
             if (hitTransformToPass.TryGetComponent(out IInteractable interactable))
             {
-                interactable.TryInteraction(transform, hit);
+                interactable.TryInteraction(hit, this);
             }
         }
     }

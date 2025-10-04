@@ -239,7 +239,7 @@ public class PlayerController : MonoBehaviour
         {
             if (InteractionComp != null)
             {
-                InputHandler.Interaction += InteractionComp.Interact;
+                InputHandler.Interaction += InteractionComp.InteractRayCast;
             }
         }
     }
@@ -250,7 +250,7 @@ public class PlayerController : MonoBehaviour
         {
             if (InteractionComp != null)
             {
-                InputHandler.Interaction -= InteractionComp.Interact;
+                InputHandler.Interaction -= InteractionComp.InteractRayCast;
             }
         }
     }

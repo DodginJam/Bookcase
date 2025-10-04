@@ -29,7 +29,7 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
     public GameObject StoredGameObject
     { get; private set; }
 
-    public abstract void Interact();
+    public abstract void Interaction(Interactioner interactioner);
 
     public bool ValidateObjectForContainer(GameObject objectToCheck, out GameObject validatedGameObject)
     {
@@ -104,13 +104,16 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
 
             if (!containedObject.TryGetComponent<T>(out _))
             {
-                Debug.LogError("Object in container is not containing the correct script type to be stored here.");
+                Debug.Log("Object in container is not containing the correct script type to be stored here.");
                 Destroy(containedObject);
                 containedObject = null;
             }
-            else
+            
+            if (!ShouldStartWithObjectSpawned)
             {
-                containedObject.transform.SetPositionAndRotation(ContainerObjectPosition.transform.position, ContainerObjectPosition.transform.rotation);
+                Debug.Log("Object in container is existing when the object has been set to empty on start.");
+                Destroy(containedObject);
+                containedObject = null;
             }
         }
 
@@ -125,17 +128,34 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
         // Make sure the object itself is not interatable within the container so the interactions don't get mixed up between object being contained interaction itself and containers.
         if (containedObject != null)
         {
-            StoredGameObject = containedObject;
+            SetObjectIntoContainer(containedObject, true, false);
+        }
+    }
 
-            if (StoredGameObject.TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
-            {
-                rigidbody.isKinematic = true;
-            }
+    public void SetObjectIntoContainer(GameObject gameObject, bool rigidBodyKinematicStatus, bool interactiveStatus)
+    {
+        StoredGameObject = gameObject;
 
-            if (StoredGameObject.TryGetComponent<IInteractable>(out IInteractable interactable))
-            {
-                interactable.IsInterationAllowed = false;
-            }
+        StoredGameObject.transform.SetPositionAndRotation(ContainerObjectPosition.transform.position, ContainerObjectPosition.transform.rotation);
+
+        SetRigidBodyStatus(StoredGameObject, rigidBodyKinematicStatus);
+
+        SetInteractableStatus(StoredGameObject, interactiveStatus);
+    }
+
+    public void SetRigidBodyStatus(GameObject gameObject, bool setKinematic)
+    {
+        if (gameObject.TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+        {
+            rigidbody.isKinematic = setKinematic;
+        }
+    }
+
+    public void SetInteractableStatus(GameObject gameObject, bool setInteractive)
+    {
+        if (gameObject.TryGetComponent<IInteractable>(out IInteractable interactable))
+        {
+            interactable.SetInteractive(setInteractive);
         }
     }
 }

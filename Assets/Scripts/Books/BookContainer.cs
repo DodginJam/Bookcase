@@ -3,15 +3,25 @@ using UnityEngine;
 
 public class BookContainer : ObjectContainer<Book>
 {
-    public override void Interact()
+    public override void Interaction(Interactioner interactioner)
     {
         if (StoredGameObject == null)
         {
             Debug.Log("Book Container interacted with - it is empty");
+
+            if (interactioner.Inventory != null)
+            {
+                Debug.Log("Inventory hand has an object in it");
+
+                if (ValidateObjectForContainer(interactioner.Inventory.ObjectInHand, out GameObject validGameObject))
+                {
+                    SetObjectIntoContainer(validGameObject, true, false);
+                }
+            }
         }
         else
         {
-            Debug.Log("Book Container interacted with - it is full");
+
         }
     }
 

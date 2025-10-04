@@ -33,9 +33,12 @@ public class Book : MonoBehaviour, IInteractable
         
     }
 
-    public void Interact()
+    public void Interaction(Interactioner interactioner)
     {
-        Debug.Log("Book interacted with.");
+        if (interactioner.Inventory != null)
+        {
+            interactioner.Inventory.TryAddObjectToHand(this.gameObject);
+        }
     }
 
     private void OnDrawGizmosSelected()

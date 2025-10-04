@@ -11,19 +11,19 @@ public interface IInteractable
     public InteractionCentrePoint InteractionCentre
     { get; set; }
 
-    public void TryInteraction(Transform interactionerTransform, RaycastHit hitInformation)
+    public void TryInteraction(RaycastHit hitInformation, Interactioner interactioner)
     {
         if (IsInterationAllowed == false)
         {
             return;
         }
 
-        if (Vector3.Distance(interactionerTransform.position, GetInteractionCentrePoint(hitInformation)) > InteractionDistance)
+        if (Vector3.Distance(interactioner.transform.position, GetInteractionCentrePoint(hitInformation)) > InteractionDistance)
         {
             return;
         }
 
-        Interact();
+        Interaction(interactioner);
     }
 
     public Vector3 GetInteractionCentrePoint(RaycastHit hitInformation)
@@ -42,7 +42,12 @@ public interface IInteractable
         return interactionCentre;
     }
 
-    public abstract void Interact();
+    public void SetInteractive(bool isInteractionAllowed)
+    {
+        IsInterationAllowed = isInteractionAllowed;
+    }
+
+    public abstract void Interaction(Interactioner interactioner);
 
     public enum InteractionCentrePoint
     {
