@@ -1,12 +1,14 @@
 using UnityEngine;
 using static IInteractable;
 
+[DefaultExecutionOrder(-1)]
 public class Book : MonoBehaviour, IInteractable
 {
     [field: SerializeField]
     public float InteractionDistance
     { get; set; }
 
+    [field: SerializeField]
     public bool IsInterationAllowed
     { get; set; }
 
@@ -14,10 +16,15 @@ public class Book : MonoBehaviour, IInteractable
     public InteractionCentrePoint InteractionCentre
     { get; set; }
 
+    void Awake()
+    {
+        IsInterationAllowed = true;
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        IsInterationAllowed = true;
+
     }
 
     // Update is called once per frame
