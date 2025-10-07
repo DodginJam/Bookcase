@@ -1,7 +1,11 @@
 using UnityEngine;
 
-public class CombatValues : MonoBehaviour, IDamagable
+public class CombatCharacter : MonoBehaviour
 {
+    [field: SerializeField]
+    public CharacterValuesStatsSO CharacterCombatValues
+    {  get; private set; }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {

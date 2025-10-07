@@ -2293,7 +2293,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69469050a0ca2924aa54ca0eb309ecd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <Stats>k__BackingField: {fileID: 11400000, guid: 759338bad781c254baf836687023d60c, type: 2}
+  <Stats>k__BackingField: {fileID: 11400000, guid: a82471d7c62700b4dbbbc8c0935674f3, type: 2}
   <InteractionDistance>k__BackingField: 3
   <IsInterationAllowed>k__BackingField: 1
   <InteractionCentre>k__BackingField: 0

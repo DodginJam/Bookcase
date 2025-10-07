@@ -5,7 +5,7 @@ using static IInteractable;
 public class Weapon : MonoBehaviour, IInteractable
 {
     [field: SerializeField]
-    public WeaponStats Stats
+    public WeaponStatsSO Stats
     { get; set; }
 
     [field: SerializeField]

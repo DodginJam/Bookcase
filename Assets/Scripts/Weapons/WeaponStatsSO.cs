@@ -1,7 +1,7 @@
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New WeaponStats", menuName = "Create New WeaponStats")]
-public class WeaponStats : ScriptableObject
+[CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create New WeaponStatsSO")]
+public class WeaponStatsSO : ScriptableObject
 {
     [field: SerializeField, Min(0)]
     public float DamagerPerProjectile
