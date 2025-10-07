@@ -12,6 +12,14 @@ public class Interactioner : MonoBehaviour
     public Inventory Inventory
     { get; private set; }
 
+    [field: SerializeField, Min(1f)]
+    public float DropObjectDistance
+    { get; private set; } = 3f;
+
+    [field: SerializeField]
+    public bool DisplayDebugGizmos
+    { get; private set; }
+
     private void Awake()
     {
         if (InteractionTransform == null)
@@ -54,7 +62,7 @@ public class Interactioner : MonoBehaviour
 
     public void InteractRayCast()
     {
-        if (Physics.Raycast(InteractionTransform.position, InteractionTransform.forward, out RaycastHit hit))
+        if (Physics.Raycast(ReturnRay(), out RaycastHit hit))
         {
             // First check if there is a rigidbody on the hit, and if there is use that as the transform to locate an interactable interface.
             // Else just look directly at the collider to check for whether the transform contains an interatable interface.
@@ -64,6 +72,35 @@ public class Interactioner : MonoBehaviour
             {
                 interactable.TryInteraction(hit, this);
             }
+        }
+    }
+
+    public Ray ReturnRay()
+    {
+        Ray ray = new Ray(InteractionTransform.position, InteractionTransform.forward);
+
+        return ray;
+    }
+
+    public void DropObject()
+    {
+        if (Inventory != null)
+        {
+            if (Inventory.ObjectInHand != null)
+            {
+                if (Physics.Raycast(ReturnRay(), out RaycastHit hit, DropObjectDistance))
+                {
+                    Inventory.TryRemoveObjectFromHand(true, true, hit.point);
+                }
+                else
+                {
+                    Inventory.TryRemoveObjectFromHand(true, true, Inventory.ObjectInHand.transform.position);
+                }
+            }
+        }
+        else
+        {
+            Debug.LogError("The inventory reference has not been assigned.");
         }
     }
 
@@ -104,5 +141,19 @@ public class Interactioner : MonoBehaviour
         // Set the out Transform and return the found status.
         taggedTransform = child;
         return childFound;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (DisplayDebugGizmos != true)
+        {
+            return;
+        }
+
+        if (InteractionTransform != null)
+        {
+            Gizmos.color = Color.blue;
+            Gizmos.DrawWireSphere(InteractionTransform.position, DropObjectDistance);
+        }
     }
 }

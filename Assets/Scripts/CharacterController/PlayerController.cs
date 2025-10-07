@@ -239,7 +239,8 @@ public class PlayerController : MonoBehaviour
         {
             if (InteractionComp != null)
             {
-                InputHandler.Interaction += InteractionComp.InteractRayCast;
+                InputHandler.InteractionTap += InteractionComp.InteractRayCast;
+                InputHandler.InteractionHold += InteractionComp.DropObject;
             }
         }
     }
@@ -250,7 +251,8 @@ public class PlayerController : MonoBehaviour
         {
             if (InteractionComp != null)
             {
-                InputHandler.Interaction -= InteractionComp.InteractRayCast;
+                InputHandler.InteractionTap -= InteractionComp.InteractRayCast;
+                InputHandler.InteractionHold -= InteractionComp.DropObject;
             }
         }
     }

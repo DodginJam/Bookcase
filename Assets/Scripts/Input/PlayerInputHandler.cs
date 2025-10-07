@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Interactions;
 
 [DefaultExecutionOrder(-1)]
 public class PlayerInputHandler : MonoBehaviour
@@ -17,7 +18,9 @@ public class PlayerInputHandler : MonoBehaviour
     public Vector2 RotationInput
     { get; private set; }
 
-    public event Action Interaction;
+    public event Action InteractionTap;
+
+    public event Action InteractionHold;
 
     private void Awake()
     {
@@ -48,9 +51,13 @@ public class PlayerInputHandler : MonoBehaviour
 
     void OnInteract(InputAction.CallbackContext context)
     {
-        if (context.started)
+        if (context.interaction is HoldInteraction)
         {
-            Interaction?.Invoke();
+            InteractionHold?.Invoke();
+        }
+        else if (context.interaction is TapInteraction)
+        {
+            InteractionTap?.Invoke();
         }
     }
 
@@ -84,7 +91,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void EnableInputListeners()
     {
-        PlayerActionMap.Interact.started += context =>
+        PlayerActionMap.Interact.performed += context =>
         {
             OnInteract(context);
         };
@@ -92,7 +99,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void DisableInputListeners()
     {
-        PlayerActionMap.Interact.started -= context =>
+        PlayerActionMap.Interact.performed -= context =>
         {
             OnInteract(context);
         };

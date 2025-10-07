@@ -104,6 +104,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <InteractionTransform>k__BackingField: {fileID: 7196668451327489748}
+  <Inventory>k__BackingField: {fileID: 0}
+  <DropObjectDistance>k__BackingField: 2
+  <DisplayDebugGizmos>k__BackingField: 0
 --- !u!114 &8140180720906020266
 MonoBehaviour:
   m_ObjectHideFlags: 0
