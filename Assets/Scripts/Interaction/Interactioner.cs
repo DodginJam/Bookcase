@@ -8,7 +8,6 @@ public class Interactioner : MonoBehaviour
     public Transform InteractionTransform
     { get; private set; }
 
-    [field: SerializeField]
     public Inventory Inventory
     { get; private set; }
 
@@ -104,7 +103,7 @@ public class Interactioner : MonoBehaviour
         }
     }
 
-    bool ReturnTaggedTransform(string tag, Transform parentTransform, out Transform taggedTransform)
+    public static bool ReturnTaggedTransform(string tag, Transform parentTransform, out Transform taggedTransform)
     {
         Transform child = null;
         bool childFound = false;

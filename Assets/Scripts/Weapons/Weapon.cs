@@ -2,8 +2,12 @@ using UnityEngine;
 using static IInteractable;
 
 [DefaultExecutionOrder(-1)]
-public class NotBook : MonoBehaviour, IInteractable
+public class Weapon : MonoBehaviour, IInteractable
 {
+    [field: SerializeField]
+    public WeaponStats Stats
+    { get; set; }
+
     [field: SerializeField]
     public float InteractionDistance
     { get; set; }

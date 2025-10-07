@@ -104,7 +104,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <InteractionTransform>k__BackingField: {fileID: 7196668451327489748}
-  <Inventory>k__BackingField: {fileID: 0}
   <DropObjectDistance>k__BackingField: 2
   <DisplayDebugGizmos>k__BackingField: 0
 --- !u!114 &8140180720906020266
@@ -336,7 +335,7 @@ GameObject:
   - component: {fileID: 153677056689747683}
   m_Layer: 0
   m_Name: Hand
-  m_TagString: Untagged
+  m_TagString: HandTransform
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

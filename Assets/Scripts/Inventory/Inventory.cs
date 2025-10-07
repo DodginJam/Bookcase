@@ -14,7 +14,15 @@ public class Inventory : MonoBehaviour
     {
         if (HandLocation == null)
         {
-            Debug.LogError("The hand location has not been assigned a transform.");
+            if (Interactioner.ReturnTaggedTransform("HandTransform", transform, out Transform taggedTransform))
+            {
+                HandLocation = taggedTransform;
+            }
+            else
+            {
+                Debug.LogError("The passed transform parent does not contain a child with the passed tag. No HandLocation transform aqquired. Defaulting to this transform.");
+                HandLocation = transform;
+            }
         }
     }
 
