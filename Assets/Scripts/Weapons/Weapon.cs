@@ -132,7 +132,14 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             AutoFire = StartCoroutine(StartAutoFire());
         }
+        else if (FireModeState == FireMode.Burst)
+        {
 
+        }
+        else if (FireModeState == FireMode.Charge)
+        {
+
+        }
     }
 
     public void FireReleased()
