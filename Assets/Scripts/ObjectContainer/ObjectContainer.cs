@@ -141,14 +141,12 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
 
             if (!containedObject.TryGetComponent<T>(out _))
             {
-                Debug.Log("Object in container is not containing the correct script type to be stored here.");
                 Destroy(containedObject);
                 containedObject = null;
             }
             
             if (!ShouldStartWithObjectSpawned)
             {
-                Debug.Log("Object in container is existing when the object has been set to empty on start.");
                 Destroy(containedObject);
                 containedObject = null;
             }

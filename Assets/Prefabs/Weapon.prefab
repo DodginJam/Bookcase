@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8621879665714832294}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Mesh&Colliders
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -42,7 +42,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1537072160224862654}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ObjectPooling
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -76,7 +76,7 @@ GameObject:
   - component: {fileID: 7747735086478329329}
   - component: {fileID: 8259193863834726749}
   - component: {fileID: 2364807776952288578}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Frame
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -184,7 +184,7 @@ GameObject:
   - component: {fileID: 1916769418935024174}
   - component: {fileID: 8288925040323155768}
   - component: {fileID: 98704134509807020}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Handle
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -291,7 +291,7 @@ GameObject:
   - component: {fileID: 6987763562290077771}
   - component: {fileID: 4242195647848901803}
   - component: {fileID: 2109867767328264149}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Weapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -335,7 +335,7 @@ Rigidbody:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
   m_ImplicitCom: 1
   m_ImplicitTensor: 1
   m_UseGravity: 1
@@ -371,7 +371,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7484759627373128764}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: FirePosition
   m_TagString: Untagged
   m_Icon: {fileID: 0}

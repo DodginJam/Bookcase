@@ -3,7 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create New WeaponStatsSO")]
 public class WeaponStatsSO : ScriptableObject
 {
-    [field: SerializeField, Min(0.1f)]
+    [field: SerializeField, Min(0.001f)]
     public float FireRatePerSecond
     { get; private set; } = 0.1f;
 
@@ -25,4 +25,5 @@ public enum FireMode
     FullAuto,
     SemiAuto,
     Burst,
+    Charge
 }

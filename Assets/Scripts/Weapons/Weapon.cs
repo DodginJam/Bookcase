@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using static IInteractable;
+using System.Collections;
 
 [DefaultExecutionOrder(-1)]
 public class Weapon : MonoBehaviour, IInteractable
@@ -25,6 +26,19 @@ public class Weapon : MonoBehaviour, IInteractable
     public Transform FirePosition
     { get; private set; }
 
+    public bool IsTriggerHeld
+    { get; set; }
+
+    public bool WeaponCooldown
+    { get; set; }
+
+    public float CoolDownTimer
+    { get; set; }
+
+    public Coroutine AutoFire
+    { get; set; }
+
+
     [field: SerializeField, Header("Projectile & Pooling")]
     public GameObject ProjectilePrefab
     { get; set; }
@@ -35,6 +49,7 @@ public class Weapon : MonoBehaviour, IInteractable
     [field: SerializeField]
     public Transform ProjectilePoolingParent
     { get; set; }
+
 
     [field: SerializeField, Header("Interaction")]
     public float InteractionDistance
@@ -47,6 +62,7 @@ public class Weapon : MonoBehaviour, IInteractable
     [field: SerializeField]
     public InteractionCentrePoint InteractionCentre
     { get; set; }
+
 
     void Awake()
     {
@@ -67,6 +83,8 @@ public class Weapon : MonoBehaviour, IInteractable
         SetWeaponStats();
 
         InstantiateProjectilesForPooling(ProjectilePoolingParent, AmmoClipSize * 3);
+
+        CoolDownTimer = FireRatePerSecond;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -78,19 +96,113 @@ public class Weapon : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
+        // During weapon cooldown, count down the cooldown timer.
+        if (WeaponCooldown == true)
+        {
+            // Minis the time from last frame to this frame.
+            if (CoolDownTimer > 0)
+            {
+                CoolDownTimer -= Time.deltaTime;
+                Debug.Log($"Time Left: {CoolDownTimer}");
+            }
+
+            // If the timer has hit or gone below zero, reset the timer and end cooldown flag.
+            if (CoolDownTimer <= 0)
+            {
+                CoolDownTimer = FireRatePerSecond;
+
+                WeaponCooldown = false;
+                Debug.Log("ReadyToFire");
+            }
+        }
+    }
+
+    public void FirePressed()
+    {
+        IsTriggerHeld = true;
+
+        if (FireModeState == FireMode.SemiAuto)
+        {
+            if (WeaponCooldown == false)
+            {
+                FireProjectile();
+            }
+        }
+        else if (FireModeState == FireMode.FullAuto)
+        {
+            AutoFire = StartCoroutine(StartAutoFire());
+        }
 
     }
 
-    public void Fire()
+    public void FireReleased()
     {
-        foreach(Projectile projectile in ProjectilePooling)
+        IsTriggerHeld = false;
+
+        if (AutoFire != null)
         {
-            if (!projectile.gameObject.activeSelf)
+            StopCoroutine(AutoFire);
+            AutoFire = null;
+        }
+    }
+
+    public IEnumerator StartAutoFire()
+    {
+        while (IsTriggerHeld)
+        {
+            if (WeaponCooldown == false)
             {
+                FireProjectile();
+            }
+
+            yield return null;
+        }
+
+    }
+
+    public void FireProjectile()
+    {
+        for (int i = 0; i < ProjectilePooling.Count; i++)
+        {
+            if (!ProjectilePooling[i].gameObject.activeSelf)
+            {
+                ProjectilePooling[i].ActivateLiveProjectile(FirePosition);
+                break;
+            }
+            
+            if (i == ProjectilePooling.Count - 1)
+            {
+                GameObject newProjectile = Instantiate(ProjectilePrefab, FirePosition.position, Quaternion.identity, null);
+
+                if (newProjectile.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.ObjectPoolingReset += ResetGameObjectForPooling;
+                }
+
+                ProjectilePooling.Add(projectile);
+
                 projectile.ActivateLiveProjectile(FirePosition);
+
                 break;
             }
         }
+
+        WeaponCooldown = true;
+    }
+
+    public void BindInputs(PlayerInputHandler playerInputs)
+    {
+        playerInputs.AttackPress += FirePressed;
+        playerInputs.AttackRelease += FireReleased;
+    }
+
+    public void RemoveInputs(PlayerInputHandler playerInputs)
+    {
+        playerInputs.AttackPress -= FirePressed;
+        playerInputs.AttackRelease -= FireReleased;
+
+        // Helps prevent issues with weapon on being dropped while firing, and being picked up again.
+        FireReleased();
     }
 
     public void SetWeaponStats()
@@ -119,10 +231,7 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             for (int i = 0; i < poolingAmount; i++)
             {
-                GameObject newProjectile = Instantiate(ProjectilePrefab);
-
-                newProjectile.transform.parent = parentForPooling;
-                newProjectile.transform.localPosition = Vector3.zero;
+                GameObject newProjectile = Instantiate(ProjectilePrefab, parentForPooling.position, Quaternion.identity, parentForPooling);
 
                 if (newProjectile.TryGetComponent<Projectile>(out Projectile projectile))
                 {

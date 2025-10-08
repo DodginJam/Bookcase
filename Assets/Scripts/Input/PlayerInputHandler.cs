@@ -22,6 +22,11 @@ public class PlayerInputHandler : MonoBehaviour
 
     public event Action InteractionHold;
 
+    public event Action AttackPress;
+
+    public event Action AttackRelease;
+
+
     private void Awake()
     {
         if (InputManager == null)
@@ -47,18 +52,6 @@ public class PlayerInputHandler : MonoBehaviour
     private void OnDisable()
     {
         DisableInputListeners();
-    }
-
-    void OnInteract(InputAction.CallbackContext context)
-    {
-        if (context.interaction is HoldInteraction)
-        {
-            InteractionHold?.Invoke();
-        }
-        else if (context.interaction is TapInteraction)
-        {
-            InteractionTap?.Invoke();
-        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -89,19 +82,45 @@ public class PlayerInputHandler : MonoBehaviour
         return rotationMovement;
     }
 
+    void OnInteract(InputAction.CallbackContext context)
+    {
+        if (context.interaction is HoldInteraction)
+        {
+            InteractionHold?.Invoke();
+        }
+        else if (context.interaction is TapInteraction)
+        {
+            InteractionTap?.Invoke();
+        }
+    }
+
+    public void OnAttack(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            AttackPress?.Invoke();
+        }
+        else if (context.canceled)
+        {
+            AttackRelease?.Invoke();
+        }
+    }
+
     public void EnableInputListeners()
     {
-        PlayerActionMap.Interact.performed += context =>
-        {
-            OnInteract(context);
-        };
+        PlayerActionMap.Interact.performed += OnInteract;
+
+        PlayerActionMap.Attack.started += OnAttack;
+
+        PlayerActionMap.Attack.canceled += OnAttack;
     }
 
     public void DisableInputListeners()
     {
-        PlayerActionMap.Interact.performed -= context =>
-        {
-            OnInteract(context);
-        };
+        PlayerActionMap.Interact.performed -= OnInteract;
+
+        PlayerActionMap.Attack.started -= OnAttack;
+
+        PlayerActionMap.Attack.canceled -= OnAttack;
     }
 }
