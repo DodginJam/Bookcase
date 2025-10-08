@@ -128,7 +128,7 @@ public class PlayerController : MonoBehaviour
     }
 
     /// <summary>
-    /// Applies the movement inputs to the desired movement directions of the character controller and store this movement in the Character Movement Velocity.
+    /// Applies the movement inputs to the desired movement directions of the character controller and store this movement in the Values Movement Velocity.
     /// </summary>
     public void HandleMovement()
     {

@@ -133,7 +133,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3bb4c77067c78fb49848c66c529ebbf4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <CharacterCombatValues>k__BackingField: {fileID: 11400000, guid: 83302e6ef312150479e7f1f83ef97f92, type: 2}
+  <StartingValues>k__BackingField: {fileID: 11400000, guid: 9c045c772d6b99049be662cea5e02219, type: 2}
+  <Health>k__BackingField: 0
+  <MaxHealth>k__BackingField: 0
 --- !u!1 &1374846756026132581
 GameObject:
   m_ObjectHideFlags: 0
@@ -381,7 +383,6 @@ GameObject:
   - component: {fileID: 3899892306699098737}
   - component: {fileID: 4015730188362308088}
   - component: {fileID: 3525888961630841514}
-  - component: {fileID: 128470841916885076}
   m_Layer: 0
   m_Name: PlayerModel
   m_TagString: Untagged
@@ -459,26 +460,3 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!136 &128470841916885076
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8644223616675268078}
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 1
-  serializedVersion: 2
-  m_Radius: 0.5
-  m_Height: 2
-  m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
