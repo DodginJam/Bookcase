@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6437f6b40fcc48e499c640028c81ad2e, type: 3}
   m_Name: TestWeaponStats
   m_EditorClassIdentifier: 
-  <FireRatePerSecond>k__BackingField: 0.075
+  <FireRatePerSecond>k__BackingField: 0.33
   <ReloadTime>k__BackingField: 1
   <AmmoClipSize>k__BackingField: 30
-  <FireModeState>k__BackingField: 0
+  <FireModeState>k__BackingField: 1
