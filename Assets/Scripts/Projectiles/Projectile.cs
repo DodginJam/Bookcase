@@ -72,6 +72,26 @@ public class Projectile : MonoBehaviour, IDamaging
         }
     }
 
+    public void ActivateLiveProjectile(Transform positionAndDirection)
+    {
+        this.gameObject.transform.position = positionAndDirection.position;
+
+        this.gameObject.transform.parent = null;
+
+        this.gameObject.SetActive(true);
+
+        Rigidbody.AddForce(positionAndDirection.forward * Force, ForceMode.Impulse);
+    }
+
+    public void DeactivateLiveProjectile()
+    {
+        ResetRigidbodyProjectile();
+
+        ObjectPoolingReset?.Invoke(this.gameObject);
+
+        this.gameObject.SetActive(false);
+    }
+
     private void OnCollisionEnter(Collision collision)
     {
         Transform hitTransformToPass = (collision.rigidbody != null) ? collision.rigidbody.transform : collision.collider.transform;
@@ -81,10 +101,6 @@ public class Projectile : MonoBehaviour, IDamaging
             damagable.TakeDamage(Damage);
         }
 
-        ResetRigidbodyProjectile();
-
-        ObjectPoolingReset?.Invoke(this.gameObject);
-
-        this.gameObject.SetActive(false);
+        DeactivateLiveProjectile();
     }
 }

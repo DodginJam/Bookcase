@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: ProjectileSO
   m_EditorClassIdentifier: 
   <Damage>k__BackingField: 20
-  <Force>k__BackingField: 20
-  <Mass>k__BackingField: 20
+  <Force>k__BackingField: 2
+  <Mass>k__BackingField: 0.1

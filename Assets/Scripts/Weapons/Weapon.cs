@@ -22,11 +22,15 @@ public class Weapon : MonoBehaviour, IInteractable
     { get; private set; }
 
     [field: SerializeField]
+    public Transform FirePosition
+    { get; private set; }
+
+    [field: SerializeField, Header("Projectile & Pooling")]
     public GameObject ProjectilePrefab
     { get; set; }
 
-    public List<GameObject> ProjectilePooling
-    { get; private set; } = new List<GameObject>();
+    public List<Projectile> ProjectilePooling
+    { get; private set; } = new List<Projectile>();
 
     [field: SerializeField]
     public Transform ProjectilePoolingParent
@@ -54,6 +58,12 @@ public class Weapon : MonoBehaviour, IInteractable
             ProjectilePoolingParent = transform;
         }
 
+        if (FirePosition == null)
+        {
+            Debug.Log("Fire Position transform not assigned so defaulted to the weapon transform itself.");
+            FirePosition = transform;
+        }
+
         SetWeaponStats();
 
         InstantiateProjectilesForPooling(ProjectilePoolingParent, AmmoClipSize * 3);
@@ -68,7 +78,19 @@ public class Weapon : MonoBehaviour, IInteractable
     // Update is called once per frame
     void Update()
     {
-        
+
+    }
+
+    public void Fire()
+    {
+        foreach(Projectile projectile in ProjectilePooling)
+        {
+            if (!projectile.gameObject.activeSelf)
+            {
+                projectile.ActivateLiveProjectile(FirePosition);
+                break;
+            }
+        }
     }
 
     public void SetWeaponStats()
@@ -93,21 +115,28 @@ public class Weapon : MonoBehaviour, IInteractable
             return;
         }
 
-        for (int i = 0; i < poolingAmount; i++)
+        if (ProjectilePrefab.TryGetComponent<Projectile>(out _))
         {
-            GameObject newProjectile = Instantiate(ProjectilePrefab);
-
-            newProjectile.transform.parent = parentForPooling;
-            newProjectile.transform.localPosition = Vector3.zero;
-
-            if (newProjectile.TryGetComponent<Projectile>(out Projectile projectile))
+            for (int i = 0; i < poolingAmount; i++)
             {
-                projectile.ObjectPoolingReset += ResetGameObjectForPooling;
+                GameObject newProjectile = Instantiate(ProjectilePrefab);
+
+                newProjectile.transform.parent = parentForPooling;
+                newProjectile.transform.localPosition = Vector3.zero;
+
+                if (newProjectile.TryGetComponent<Projectile>(out Projectile projectile))
+                {
+                    projectile.ObjectPoolingReset += ResetGameObjectForPooling;
+                }
+
+                ProjectilePooling.Add(projectile);
+
+                newProjectile.SetActive(false);
             }
-
-            ProjectilePooling.Add(newProjectile);
-
-            newProjectile.SetActive(false);
+        }
+        else
+        {
+            Debug.LogError($"Non-projectile holding object being used as a projectile prefab for this weapon {this.gameObject.name}");
         }
     }
 
@@ -137,5 +166,14 @@ public class Weapon : MonoBehaviour, IInteractable
         }
         
         Gizmos.DrawWireSphere(transform.position, InteractionDistance);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (FirePosition != null)
+        {
+            Gizmos.color = Color.red;
+            Gizmos.DrawSphere(FirePosition.position, 0.025f);
+        }
     }
 }
