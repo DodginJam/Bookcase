@@ -80,6 +80,8 @@ public class Projectile : MonoBehaviour, IDamaging
 
         this.gameObject.SetActive(true);
 
+        ResetRigidbodyProjectile();
+
         Rigidbody.AddForce(positionAndDirection.forward * Force, ForceMode.Impulse);
     }
 
