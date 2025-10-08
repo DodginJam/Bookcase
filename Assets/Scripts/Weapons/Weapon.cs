@@ -1,7 +1,9 @@
-using UnityEngine;
-using System.Collections.Generic;
-using static IInteractable;
+using System;
 using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.Windows;
+using static IInteractable;
 
 [DefaultExecutionOrder(-1)]
 public class Weapon : MonoBehaviour, IInteractable
@@ -68,24 +70,30 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         IsInterationAllowed = true;
 
+        // Null checking for the pooling parent transform.
         if (ProjectilePoolingParent == null)
         {
             Debug.Log("Projectile Pooling parent not assigned so defaulted to the weapon transform itself.");
             ProjectilePoolingParent = transform;
         }
 
+        // Null checking for the FirePosition transform.
         if (FirePosition == null)
         {
             Debug.Log("Fire Position transform not assigned so defaulted to the weapon transform itself.");
             FirePosition = transform;
         }
 
+        // Init of the stats from the SO reference.
         SetWeaponStats();
 
+        // Set up the listeners for the SO to allow changes to be pushed to runtime instances that are using the SO data.
         Stats.UpdateLinkedWeapons += SetWeaponStats;
 
+        // Sets up the object pooling.
         InstantiateProjectilesForPooling(ProjectilePoolingParent, AmmoClipSize * 3);
 
+        // Initialise the interal cooldown time for firerate management.
         CoolDownTimer = FireRatePerSecond;
     }
 
@@ -125,6 +133,9 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// Called on input down for the fire input, ensures weapon fire according to it mode of fire.
+    /// </summary>
     public void FirePressed()
     {
         IsTriggerHeld = true;
@@ -150,6 +161,9 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// To be called on input down for the fire input.Cancels the firing status of the weapon.
+    /// </summary>
     public void FireReleased()
     {
         IsTriggerHeld = false;
@@ -161,6 +175,10 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    /// <summary>
+    /// For Full Auto fire, ensures firerate is managed every frame when trigger is held down.
+    /// </summary>
+    /// <returns></returns>
     public IEnumerator StartAutoFire()
     {
         while (IsTriggerHeld)
@@ -175,6 +193,9 @@ public class Weapon : MonoBehaviour, IInteractable
 
     }
 
+    /// <summary>
+    /// Accesses the object pooling and select an inactive projectile to activate and fire. Failsafe ensures new objects are instantiated if all objects are active in the pool.
+    /// </summary>
     public void FireProjectile()
     {
         for (int i = 0; i < ProjectilePooling.Count; i++)
@@ -202,15 +223,24 @@ public class Weapon : MonoBehaviour, IInteractable
             }
         }
 
+        // After a projectile is fired, ensure the weaponcooldown flag is set to allow countdown for next chance to fire to start.
         WeaponCooldown = true;
     }
 
+    /// <summary>
+    /// Binds the firing methods to the attack inputs.
+    /// </summary>
+    /// <param name="playerInputs"></param>
     public void BindInputs(PlayerInputHandler playerInputs)
     {
         playerInputs.AttackPress += FirePressed;
         playerInputs.AttackRelease += FireReleased;
     }
 
+    /// <summary>
+    /// Un-Binds the firing methods from the attack inputs.
+    /// </summary>
+    /// <param name="playerInputs"></param>
     public void RemoveInputs(PlayerInputHandler playerInputs)
     {
         playerInputs.AttackPress -= FirePressed;
@@ -220,6 +250,9 @@ public class Weapon : MonoBehaviour, IInteractable
         FireReleased();
     }
 
+    /// <summary>
+    /// Initialise the stats from the scriptable object reference.
+    /// </summary>
     public void SetWeaponStats()
     {
         if (Stats == null)
@@ -234,6 +267,11 @@ public class Weapon : MonoBehaviour, IInteractable
         FireModeState = Stats.FireModeState;
     }
 
+    /// <summary>
+    /// Creates and sets up the intial state for the projectiles that are to be used by the weapon.
+    /// </summary>
+    /// <param name="parentForPooling"></param>
+    /// <param name="poolingAmount"></param>
     public void InstantiateProjectilesForPooling(Transform parentForPooling, int poolingAmount)
     {
         if (ProjectilePrefab == null)

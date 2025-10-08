@@ -13,7 +13,7 @@ public class WeaponStatsSOEditor : Editor
 
         GUILayout.Space(10);
 
-        if (GUILayout.Button("Push Changes To All Weapons"))
+        if (GUILayout.Button("Push Changes At Runtime"))
         {
             WeaponSO.UpdateLinkedWeaponValues();
         }

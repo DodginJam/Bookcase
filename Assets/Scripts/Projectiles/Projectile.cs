@@ -24,6 +24,9 @@ public class Projectile : MonoBehaviour, IDamaging
     public Rigidbody Rigidbody
     { get; set; }
 
+    /// <summary>
+    /// Allows for additional resetting methods to be added to the projectile upon it being reset, such as by an object pooling manager.
+    /// </summary>
     public event Action<GameObject> ObjectPoolingReset;
 
     void Awake()

@@ -13,7 +13,7 @@ public class ProjectileSOEditor : Editor
 
         GUILayout.Space(10);
 
-        if (GUILayout.Button("Push Changes To All Projectiles"))
+        if (GUILayout.Button("Push Changes At Runtime"))
         {
             Projectile.UpdateLinkedProjectileValues();
         }
