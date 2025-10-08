@@ -82,9 +82,19 @@ public class Weapon : MonoBehaviour, IInteractable
 
         SetWeaponStats();
 
+        Stats.UpdateLinkedWeapons += SetWeaponStats;
+
         InstantiateProjectilesForPooling(ProjectilePoolingParent, AmmoClipSize * 3);
 
         CoolDownTimer = FireRatePerSecond;
+    }
+
+    private void OnDestroy()
+    {
+        if (Stats != null)
+        {
+            Stats.UpdateLinkedWeapons -= SetWeaponStats;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -103,7 +113,6 @@ public class Weapon : MonoBehaviour, IInteractable
             if (CoolDownTimer > 0)
             {
                 CoolDownTimer -= Time.deltaTime;
-                Debug.Log($"Time Left: {CoolDownTimer}");
             }
 
             // If the timer has hit or gone below zero, reset the timer and end cooldown flag.
@@ -112,7 +121,6 @@ public class Weapon : MonoBehaviour, IInteractable
                 CoolDownTimer = FireRatePerSecond;
 
                 WeaponCooldown = false;
-                Debug.Log("ReadyToFire");
             }
         }
     }

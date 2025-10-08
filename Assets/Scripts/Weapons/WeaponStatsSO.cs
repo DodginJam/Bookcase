@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create New WeaponStatsSO")]
@@ -18,6 +19,13 @@ public class WeaponStatsSO : ScriptableObject
     [field: SerializeField]
     public FireMode FireModeState
     { get; private set; }
+
+    public event Action UpdateLinkedWeapons;
+
+    public void UpdateLinkedWeaponValues()
+    {
+        UpdateLinkedWeapons?.Invoke();
+    }
 }
 
 public enum FireMode

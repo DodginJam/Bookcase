@@ -9,10 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6437f6b40fcc48e499c640028c81ad2e, type: 3}
-  m_Name: WeaponStatsSO
+  m_Script: {fileID: 11500000, guid: b26315595a12b2f43ac1c874a5d3d486, type: 3}
+  m_Name: TestStartingValues
   m_EditorClassIdentifier: 
-  <FireRatePerSecond>k__BackingField: 0.075
-  <ReloadTime>k__BackingField: 1
-  <AmmoClipSize>k__BackingField: 30
-  <FireModeState>k__BackingField: 0

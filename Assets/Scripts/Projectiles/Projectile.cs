@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -12,6 +13,12 @@ public class Projectile : MonoBehaviour, IDamaging
     { get; set; }
 
     public float Force
+    { get; set; }
+
+    public float ActiveLifeTime
+    { get; set; }
+
+    public Coroutine LifeTimer
     { get; set; }
 
     public Rigidbody Rigidbody
@@ -34,6 +41,16 @@ public class Projectile : MonoBehaviour, IDamaging
         }
 
         InitialiseProjectile();
+
+        ProjectileValues.UpdateLinkedProjectiles += InitialiseProjectile;
+    }
+
+    private void OnDestroy()
+    {
+        if (ProjectileValues != null)
+        {
+            ProjectileValues.UpdateLinkedProjectiles -= InitialiseProjectile;
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -58,6 +75,7 @@ public class Projectile : MonoBehaviour, IDamaging
 
         Damage = ProjectileValues.Damage;
         Force = ProjectileValues.Force;
+        ActiveLifeTime = ProjectileValues.ActiveLifeTime;
 
         if (Rigidbody != null) Rigidbody.mass = ProjectileValues.Mass;
         
@@ -78,9 +96,11 @@ public class Projectile : MonoBehaviour, IDamaging
 
         this.gameObject.transform.parent = null;
 
+        ResetRigidbodyProjectile();
+
         this.gameObject.SetActive(true);
 
-        ResetRigidbodyProjectile();
+        LifeTimer = StartCoroutine(LifeTimeCounter());
 
         Rigidbody.AddForce(positionAndDirection.forward * Force, ForceMode.Impulse);
     }
@@ -91,7 +111,32 @@ public class Projectile : MonoBehaviour, IDamaging
 
         ObjectPoolingReset?.Invoke(this.gameObject);
 
+        if (LifeTimer != null)
+        {
+            StopCoroutine(LifeTimer);
+            LifeTimer = null;
+        }
+
         this.gameObject.SetActive(false);
+    }
+
+    public IEnumerator LifeTimeCounter()
+    {
+        float currentTimer = ActiveLifeTime;
+
+        while (this.gameObject.activeSelf)
+        {
+            currentTimer -= Time.deltaTime;
+
+            if (currentTimer <= 0)
+            {
+                DeactivateLiveProjectile();
+
+                break;
+            }
+
+            yield return null;
+        }
     }
 
     private void OnCollisionEnter(Collision collision)
