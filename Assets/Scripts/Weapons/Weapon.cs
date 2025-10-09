@@ -21,7 +21,7 @@ public class Weapon : MonoBehaviour, IInteractable
     { get; private set; } = 30;
 
     public WeaponTypeSO WeaponType
-    { get; private set; }
+    { get; set; }
 
     /// <summary>
     /// For exclusive use of the charge fire mode, time to charge for shot to fire.
@@ -68,6 +68,13 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public Coroutine FireRoutine
     { get; set; }
+
+    public event Action<bool> TriggerPullEvents;
+
+    public event Action<bool> TriggerReleaseEvents;
+
+    public event Action OnWeaponShoot;
+
 
     [field: SerializeField, Header("Projectile & Pooling")]
     public GameObject ProjectilePrefab
@@ -130,6 +137,24 @@ public class Weapon : MonoBehaviour, IInteractable
         if (Stats != null)
         {
             Stats.UpdateLinkedWeapons -= SetWeaponStats;
+        }
+
+        RemoveWeaponTypeListeners();
+    }
+
+    void SetUpWeaponTypeListeners()
+    {
+        if (WeaponType != null)
+        {
+            TriggerPullEvents += TestLog;
+        }
+    }
+
+    void RemoveWeaponTypeListeners()
+    {
+        if (WeaponType != null)
+        {
+            TriggerPullEvents -= TestLog;
         }
     }
 
@@ -238,6 +263,16 @@ public class Weapon : MonoBehaviour, IInteractable
         TriggerReleased();
     }
 
+    public void TriggerPullEventInvoke(bool successfulTriggerPull)
+    {
+        TriggerPullEvents?.Invoke(successfulTriggerPull);
+    }
+
+    public void TriggerReleaseEventInvoke(bool successfulTriggerRelease)
+    {
+        TriggerReleaseEvents?.Invoke(successfulTriggerRelease);
+    }
+
     /// <summary>
     /// Initialise the stats from the scriptable object reference.
     /// </summary>
@@ -252,10 +287,29 @@ public class Weapon : MonoBehaviour, IInteractable
         FireRatePerSecond = Stats.FireRatePerSecond;
         ReloadTime = Stats.ReloadTime;
         AmmoClipSize = Stats.AmmoClipSize;
+
+        RemoveWeaponTypeListeners();
         WeaponType = Stats.WeaponType;
+        SetUpWeaponTypeListeners();
+
         ChargeTime = Stats.ChargeTime;
         BurstNumberOfShots = Stats.BurstNumberOfShots;
         BurstShotFireRate = Stats.BurstShotFireRate;
+    }
+
+    void TestLog(bool successStatus)
+    {
+        string message;
+        if (successStatus)
+        {
+            message = "Trigger Pull Event Fired - Success";
+        }
+        else
+        {
+            message = "Trigger Pull Event Fired - Failed";
+        }
+
+        Debug.Log(message);
     }
 
     /// <summary>

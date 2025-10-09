@@ -10,17 +10,17 @@ public class BurstSO : WeaponTypeSO
         if (weapon.WeaponCooldown == false && weapon.FireRoutine == null)
         {
             weapon.FireRoutine = weapon.StartCoroutine(BurstingFire(weapon, this));
-            TriggerPullEventInvoke(true);
+            weapon.TriggerPullEventInvoke(true);
         }
         else
         {
-            TriggerPullEventInvoke(false);
+            weapon.TriggerPullEventInvoke(false);
         }
     }
 
     public override void OnTriggerRelease(Weapon weapon)
     {
-        TriggerReleaseEventInvoke(true);
+        weapon.TriggerReleaseEventInvoke(true);
     }
 
     public IEnumerator BurstingFire(Weapon weapon, WeaponTypeSO weaponTypeSO)

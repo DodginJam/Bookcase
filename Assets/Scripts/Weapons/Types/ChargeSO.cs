@@ -13,11 +13,11 @@ public class ChargeSO : WeaponTypeSO
         if (weapon.WeaponCooldown == false)
         {
             weapon.FireRoutine = weapon.StartCoroutine(ChargingFire(weapon));
-            TriggerPullEventInvoke(true);
+            weapon.TriggerPullEventInvoke(true);
         }
         else
         {
-            TriggerPullEventInvoke(false);
+            weapon.TriggerPullEventInvoke(false);
         }
     }
 
@@ -25,11 +25,11 @@ public class ChargeSO : WeaponTypeSO
     {
         if (ChargeTimer <= 0)
         {
-            TriggerReleaseEventInvoke(true);
+            weapon.TriggerReleaseEventInvoke(true);
         }
         else
         {
-            TriggerReleaseEventInvoke(false);
+            weapon.TriggerReleaseEventInvoke(false);
         }
     }
 

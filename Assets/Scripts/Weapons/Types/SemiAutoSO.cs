@@ -10,16 +10,16 @@ public class SemiAutoSO : WeaponTypeSO
         if (weapon.WeaponCooldown == false)
         {
             weapon.FireProjectile();
-            TriggerPullEventInvoke(true);
+            weapon.TriggerPullEventInvoke(true);
         }
         else
         {
-            TriggerPullEventInvoke(false);
+            weapon.TriggerPullEventInvoke(false);
         }
     }
 
     public override void OnTriggerRelease(Weapon weapon)
     {
-        TriggerReleaseEventInvoke(true);
+        weapon.TriggerReleaseEventInvoke(true);
     }
 }
