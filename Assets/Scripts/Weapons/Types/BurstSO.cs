@@ -5,12 +5,22 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "New BurstSO", menuName = "Create New BurstSO")]
 public class BurstSO : WeaponTypeSO
 {
-    public override void OnFirePressed(Weapon weapon)
+    public override void OnTriggerPress(Weapon weapon)
     {
         if (weapon.WeaponCooldown == false && weapon.FireRoutine == null)
         {
             weapon.FireRoutine = weapon.StartCoroutine(BurstingFire(weapon, this));
+            TriggerPullEventInvoke(true);
         }
+        else
+        {
+            TriggerPullEventInvoke(false);
+        }
+    }
+
+    public override void OnTriggerRelease(Weapon weapon)
+    {
+        TriggerReleaseEventInvoke(true);
     }
 
     public IEnumerator BurstingFire(Weapon weapon, WeaponTypeSO weaponTypeSO)

@@ -5,26 +5,46 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "New ChargeSO", menuName = "Create New ChargeSO")]
 public class ChargeSO : WeaponTypeSO
 {
-    public override void OnFirePressed(Weapon weapon)
+    public float ChargeTimer
+    {  get; set; }
+
+    public override void OnTriggerPress(Weapon weapon)
     {
         if (weapon.WeaponCooldown == false)
         {
             weapon.FireRoutine = weapon.StartCoroutine(ChargingFire(weapon));
+            TriggerPullEventInvoke(true);
+        }
+        else
+        {
+            TriggerPullEventInvoke(false);
+        }
+    }
+
+    public override void OnTriggerRelease(Weapon weapon)
+    {
+        if (ChargeTimer <= 0)
+        {
+            TriggerReleaseEventInvoke(true);
+        }
+        else
+        {
+            TriggerReleaseEventInvoke(false);
         }
     }
 
     public IEnumerator ChargingFire(Weapon weapon)
     {
-        float chargeTimer = weapon.ChargeTime;
+        ChargeTimer = weapon.ChargeTime;
 
         while (weapon.IsTriggerHeld)
         {
-            if (chargeTimer > 0)
+            if (ChargeTimer > 0)
             {
-                chargeTimer -= Time.deltaTime;
+                ChargeTimer -= Time.deltaTime;
             }
 
-            if (chargeTimer <= 0)
+            if (ChargeTimer <= 0)
             {
                 weapon.FireProjectile();
                 break;

@@ -164,19 +164,21 @@ public class Weapon : MonoBehaviour, IInteractable
     /// <summary>
     /// Called on input down for the fire input, ensures weapon fire according to it mode of fire.
     /// </summary>
-    public void FirePressed()
+    public void TriggerPressed()
     {
         IsTriggerHeld = true;
 
-        WeaponType.OnFirePressed(this);
+        WeaponType.OnTriggerPress(this);
     }
 
     /// <summary>
     /// To be called on input down for the fire input.Cancels the firing status of the weapon.
     /// </summary>
-    public void FireReleased()
+    public void TriggerReleased()
     {
         IsTriggerHeld = false;
+
+        WeaponType.OnTriggerRelease(this);
     }
 
     /// <summary>
@@ -219,8 +221,8 @@ public class Weapon : MonoBehaviour, IInteractable
     /// <param name="playerInputs"></param>
     public void BindInputs(PlayerInputHandler playerInputs)
     {
-        playerInputs.AttackPress += FirePressed;
-        playerInputs.AttackRelease += FireReleased;
+        playerInputs.AttackPress += TriggerPressed;
+        playerInputs.AttackRelease += TriggerReleased;
     }
 
     /// <summary>
@@ -229,11 +231,11 @@ public class Weapon : MonoBehaviour, IInteractable
     /// <param name="playerInputs"></param>
     public void RemoveInputs(PlayerInputHandler playerInputs)
     {
-        playerInputs.AttackPress -= FirePressed;
-        playerInputs.AttackRelease -= FireReleased;
+        playerInputs.AttackPress -= TriggerPressed;
+        playerInputs.AttackRelease -= TriggerReleased;
 
         // Helps prevent issues with weapon on being dropped while firing, and being picked up again.
-        FireReleased();
+        TriggerReleased();
     }
 
     /// <summary>

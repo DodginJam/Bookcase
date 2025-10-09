@@ -5,9 +5,16 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "New FullAuto", menuName = "Create New FullAuto")]
 public class FullAutoSO : WeaponTypeSO
 {
-    public override void OnFirePressed(Weapon weapon)
+    public override void OnTriggerPress(Weapon weapon)
     {
         weapon.FireRoutine = weapon.StartCoroutine(StartAutoFire(weapon));
+
+        TriggerPullEventInvoke(true);
+    }
+
+    public override void OnTriggerRelease(Weapon weapon)
+    {
+        TriggerReleaseEventInvoke(true);
     }
 
     /// <summary>
