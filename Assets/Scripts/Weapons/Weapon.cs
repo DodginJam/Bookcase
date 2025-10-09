@@ -73,7 +73,7 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public event Action<bool> TriggerReleaseEvents;
 
-    public event Action OnWeaponShoot;
+    public event Action<bool> OnWeaponShoot;
 
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -138,24 +138,31 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             Stats.UpdateLinkedWeapons -= SetWeaponStats;
         }
-
-        RemoveWeaponTypeListeners();
+    }
+    
+    void SetUpWeaponListeners()
+    {
+        OnWeaponShoot += TestTriggerLog;
     }
 
-    void SetUpWeaponTypeListeners()
+    void RemoveWeaponListeners()
     {
-        if (WeaponType != null)
-        {
-            TriggerPullEvents += TestLog;
-        }
+        OnWeaponShoot -= TestTriggerLog;
     }
 
-    void RemoveWeaponTypeListeners()
+    void TestTriggerLog(bool successStatus)
     {
-        if (WeaponType != null)
+        string message;
+        if (successStatus)
         {
-            TriggerPullEvents -= TestLog;
+            message = "Weapon Shoot Event Fired - Success";
         }
+        else
+        {
+            message = "Weapon Shoot Event Fired - Failed";
+        }
+
+        Debug.Log(message);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -236,6 +243,8 @@ public class Weapon : MonoBehaviour, IInteractable
             }
         }
 
+        ShootWeaponEventInvoke(true);
+
         // After a projectile is fired, ensure the weaponcooldown flag is set to allow countdown for next chance to fire to start.
         WeaponCooldown = setCooldown;
     }
@@ -260,7 +269,7 @@ public class Weapon : MonoBehaviour, IInteractable
         playerInputs.AttackRelease -= TriggerReleased;
 
         // Helps prevent issues with weapon on being dropped while firing, and being picked up again.
-        TriggerReleased();
+        IsTriggerHeld = false;
     }
 
     public void TriggerPullEventInvoke(bool successfulTriggerPull)
@@ -271,6 +280,11 @@ public class Weapon : MonoBehaviour, IInteractable
     public void TriggerReleaseEventInvoke(bool successfulTriggerRelease)
     {
         TriggerReleaseEvents?.Invoke(successfulTriggerRelease);
+    }
+
+    public void ShootWeaponEventInvoke(bool successfullShoot)
+    {
+        OnWeaponShoot?.Invoke(successfullShoot);
     }
 
     /// <summary>
@@ -288,28 +302,13 @@ public class Weapon : MonoBehaviour, IInteractable
         ReloadTime = Stats.ReloadTime;
         AmmoClipSize = Stats.AmmoClipSize;
 
-        RemoveWeaponTypeListeners();
+        RemoveWeaponListeners();
         WeaponType = Stats.WeaponType;
-        SetUpWeaponTypeListeners();
+        SetUpWeaponListeners();
 
         ChargeTime = Stats.ChargeTime;
         BurstNumberOfShots = Stats.BurstNumberOfShots;
         BurstShotFireRate = Stats.BurstShotFireRate;
-    }
-
-    void TestLog(bool successStatus)
-    {
-        string message;
-        if (successStatus)
-        {
-            message = "Trigger Pull Event Fired - Success";
-        }
-        else
-        {
-            message = "Trigger Pull Event Fired - Failed";
-        }
-
-        Debug.Log(message);
     }
 
     /// <summary>

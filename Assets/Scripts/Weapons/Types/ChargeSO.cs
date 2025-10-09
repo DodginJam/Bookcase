@@ -30,6 +30,7 @@ public class ChargeSO : WeaponTypeSO
         else
         {
             weapon.TriggerReleaseEventInvoke(false);
+            weapon.ShootWeaponEventInvoke(false);
         }
     }
 
