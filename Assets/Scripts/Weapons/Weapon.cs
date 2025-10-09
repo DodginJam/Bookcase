@@ -294,7 +294,7 @@ public class Weapon : MonoBehaviour, IInteractable
 
         // Ensure the burst fire Coroutine reference is set to clear and reset the cooldown timer for between burst shots.
         BurstFire = null;
-        CoolDownTimer = FireRatePerSecond;
+        // CoolDownTimer = FireRatePerSecond;
     }
 
     /// <summary>
