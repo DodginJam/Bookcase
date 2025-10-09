@@ -8,17 +8,24 @@ public class WeaponStatsSO : ScriptableObject
     public float FireRatePerSecond
     { get; private set; } = 0.1f;
 
-    [field: SerializeField]
+    [field: SerializeField, Min(0.01f)]
     public float ReloadTime
     { get; private set; } = 1.0f;
 
-    [field: SerializeField]
+    [field: SerializeField, Min(1)]
     public int AmmoClipSize
     { get; private set; } = 30;
 
     [field: SerializeField]
     public FireMode FireModeState
     { get; private set; }
+
+    /// <summary>
+    /// For exclusive use of the charge fire mode, time to charge for shot to fire - exposed via Editor.
+    /// </summary>
+    [field: SerializeField, Min(0.01f), HideInInspector, Tooltip("For exclusive use of the charge fire mode, time to charge for shot to fire - exposed via Editor.")]
+    public float ChargeTime
+    { get; set; } = 1.0f;
 
     public event Action UpdateLinkedWeapons;
 

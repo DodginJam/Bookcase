@@ -8,7 +8,7 @@ using static IInteractable;
 [DefaultExecutionOrder(-1)]
 public class Weapon : MonoBehaviour, IInteractable
 {
-    [field: SerializeField, Header("Weapon")]
+    [field: SerializeField, Header("Weapon Stats Properties")]
     public WeaponStatsSO Stats
     { get; set; }
 
@@ -24,22 +24,48 @@ public class Weapon : MonoBehaviour, IInteractable
     public FireMode FireModeState
     { get; private set; }
 
+    /// <summary>
+    /// For exclusive use of the charge fire mode, time to charge for shot to fire.
+    /// </summary>
+    public float ChargeTime
+    { get; set; } = 1.0f;
+
+    /// <summary>
+    /// The point and direction the projectiles are emitted from.
+    /// </summary>
     [field: SerializeField]
     public Transform FirePosition
     { get; private set; }
 
+    /// <summary>
+    /// Read from the input system, tracks if the trigger is being held.
+    /// </summary>
     public bool IsTriggerHeld
     { get; set; }
 
+    /// <summary>
+    /// Flag to track if the weapon is currently waiting until it can fire again.
+    /// </summary>
     public bool WeaponCooldown
     { get; set; }
 
+    /// <summary>
+    /// The internal timer counting down how long to wait between shots to maintain desired firerate.
+    /// </summary>
     public float CoolDownTimer
     { get; set; }
 
+    /// <summary>
+    /// Holds reference to the routine for allow full-auto fire.
+    /// </summary>
     public Coroutine AutoFire
     { get; set; }
 
+    /// <summary>
+    /// Holds reference to the routine for allow charging fire.
+    /// </summary>
+    public Coroutine ChargeFire
+    { get; set; }
 
     [field: SerializeField, Header("Projectile & Pooling")]
     public GameObject ProjectilePrefab
@@ -157,7 +183,10 @@ public class Weapon : MonoBehaviour, IInteractable
         }
         else if (FireModeState == FireMode.Charge)
         {
-
+            if (WeaponCooldown == false)
+            {
+                ChargeFire = StartCoroutine(ChargingFire());
+            }
         }
     }
 
@@ -190,7 +219,27 @@ public class Weapon : MonoBehaviour, IInteractable
 
             yield return null;
         }
+    }
 
+    public IEnumerator ChargingFire()
+    {
+        float chargeTimer = ChargeTime;
+
+        while (IsTriggerHeld)
+        {
+            if (chargeTimer > 0)
+            {
+                chargeTimer -= Time.deltaTime;
+            }
+
+            if (chargeTimer <= 0)
+            {
+                FireProjectile();
+                break;
+            }
+
+            yield return null;
+        }
     }
 
     /// <summary>
@@ -265,6 +314,7 @@ public class Weapon : MonoBehaviour, IInteractable
         ReloadTime = Stats.ReloadTime;
         AmmoClipSize = Stats.AmmoClipSize;
         FireModeState = Stats.FireModeState;
+        ChargeTime = Stats.ChargeTime;
     }
 
     /// <summary>

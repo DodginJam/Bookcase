@@ -1,4 +1,3 @@
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 
 public class Values : MonoBehaviour, IDamagable
@@ -7,11 +6,9 @@ public class Values : MonoBehaviour, IDamagable
     public StartingValueSO StartingValues
     { get; set; }
 
-    [field: SerializeField, Min(0)]
     public float Health
     { get; set; }
 
-    [field: SerializeField, Min(0)]
     public float MaxHealth 
     { get; set; }
 
@@ -53,6 +50,6 @@ public class Values : MonoBehaviour, IDamagable
         }
 
         MaxHealth = StartingValues.HealthMaximum;
-        Health = StartingValues.HealthStarting;
+        Health = Mathf.Clamp(StartingValues.HealthStarting, 0, StartingValues.HealthMaximum);
     }
 }

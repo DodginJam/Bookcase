@@ -134,8 +134,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <StartingValues>k__BackingField: {fileID: 11400000, guid: 9c045c772d6b99049be662cea5e02219, type: 2}
-  <Health>k__BackingField: 0
-  <MaxHealth>k__BackingField: 0
 --- !u!1 &1374846756026132581
 GameObject:
   m_ObjectHideFlags: 0
