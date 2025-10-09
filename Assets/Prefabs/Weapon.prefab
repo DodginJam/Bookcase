@@ -356,6 +356,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   <Stats>k__BackingField: {fileID: 11400000, guid: a82471d7c62700b4dbbbc8c0935674f3, type: 2}
+  <WeaponType>k__BackingField: {fileID: 11400000, guid: f69e3493655b250409c921b5541c6385, type: 2}
   <FirePosition>k__BackingField: {fileID: 7484759627373128764}
   <ProjectilePrefab>k__BackingField: {fileID: 1045022235505385638, guid: 8ffb63c6726ced74fa7a4800f8455444, type: 3}
   <ProjectilePoolingParent>k__BackingField: {fileID: 1537072160224862654}

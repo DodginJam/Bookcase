@@ -20,7 +20,6 @@ public class Weapon : MonoBehaviour, IInteractable
     public int AmmoClipSize
     { get; private set; } = 30;
 
-    [field: SerializeField]
     public WeaponTypeSO WeaponType
     { get; private set; }
 
