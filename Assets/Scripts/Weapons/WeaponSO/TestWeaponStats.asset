@@ -15,5 +15,7 @@ MonoBehaviour:
   <FireRatePerSecond>k__BackingField: 0.1
   <ReloadTime>k__BackingField: 1
   <AmmoClipSize>k__BackingField: 30
-  <FireModeState>k__BackingField: 3
+  <FireModeState>k__BackingField: 2
   <ChargeTime>k__BackingField: 1
+  <BurstNumberOfShots>k__BackingField: 3
+  <BurstShotFireRate>k__BackingField: 0.015

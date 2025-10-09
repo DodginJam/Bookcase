@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: TestProjectileStats
   m_EditorClassIdentifier: 
   <Damage>k__BackingField: 20
-  <Force>k__BackingField: 20
+  <Force>k__BackingField: 1.1
   <Mass>k__BackingField: 0.1
   <ActiveLifeTime>k__BackingField: 5

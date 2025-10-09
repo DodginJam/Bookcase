@@ -31,6 +31,18 @@ public class Weapon : MonoBehaviour, IInteractable
     { get; set; } = 1.0f;
 
     /// <summary>
+    /// For exclusive use of the burst fire mode, number of projectiles in the burst.
+    /// </summary>
+    public int BurstNumberOfShots
+    { get; set; } = 3;
+
+    /// <summary>
+    /// For exclusive use of the burst fire mode, time between each shot within the burst.
+    /// </summary>
+    public float BurstShotFireRate
+    { get; set; } = 0.1f;
+
+    /// <summary>
     /// The point and direction the projectiles are emitted from.
     /// </summary>
     [field: SerializeField]
@@ -65,6 +77,12 @@ public class Weapon : MonoBehaviour, IInteractable
     /// Holds reference to the routine for allow charging fire.
     /// </summary>
     public Coroutine ChargeFire
+    { get; set; }
+
+    /// <summary>
+    /// Holds reference to the routine for allow burst fire.
+    /// </summary>
+    public Coroutine BurstFire
     { get; set; }
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -179,7 +197,10 @@ public class Weapon : MonoBehaviour, IInteractable
         }
         else if (FireModeState == FireMode.Burst)
         {
-
+            if (WeaponCooldown == false && BurstFire == null)
+            {
+                BurstFire = StartCoroutine(BurstingFire());
+            }
         }
         else if (FireModeState == FireMode.Charge)
         {
@@ -196,12 +217,6 @@ public class Weapon : MonoBehaviour, IInteractable
     public void FireReleased()
     {
         IsTriggerHeld = false;
-
-        if (AutoFire != null)
-        {
-            StopCoroutine(AutoFire);
-            AutoFire = null;
-        }
     }
 
     /// <summary>
@@ -242,10 +257,50 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    public IEnumerator BurstingFire()
+    {
+        int shotsLeftInBurst = BurstNumberOfShots;
+
+        float burstTimer = 0;
+
+        while (shotsLeftInBurst > 0)
+        {
+            if (WeaponCooldown == false)
+            {
+                if (burstTimer > 0)
+                {
+                    burstTimer -= Time.deltaTime;
+                }
+
+                if (burstTimer <= 0)
+                {
+                    FireProjectile(false);
+                    shotsLeftInBurst--;
+
+                    if (shotsLeftInBurst > 0)
+                    {
+                        burstTimer = BurstShotFireRate;
+                    }
+                    else if (shotsLeftInBurst <= 0)
+                    {
+                        WeaponCooldown = true;
+                        break;
+                    }
+                }
+            }
+
+            yield return null;
+        }
+
+        // Ensure the burst fire Coroutine reference is set to clear and reset the cooldown timer for between burst shots.
+        BurstFire = null;
+        CoolDownTimer = FireRatePerSecond;
+    }
+
     /// <summary>
     /// Accesses the object pooling and select an inactive projectile to activate and fire. Failsafe ensures new objects are instantiated if all objects are active in the pool.
     /// </summary>
-    public void FireProjectile()
+    public void FireProjectile(bool setCooldown = true)
     {
         for (int i = 0; i < ProjectilePooling.Count; i++)
         {
@@ -273,7 +328,7 @@ public class Weapon : MonoBehaviour, IInteractable
         }
 
         // After a projectile is fired, ensure the weaponcooldown flag is set to allow countdown for next chance to fire to start.
-        WeaponCooldown = true;
+        WeaponCooldown = setCooldown;
     }
 
     /// <summary>
@@ -315,6 +370,8 @@ public class Weapon : MonoBehaviour, IInteractable
         AmmoClipSize = Stats.AmmoClipSize;
         FireModeState = Stats.FireModeState;
         ChargeTime = Stats.ChargeTime;
+        BurstNumberOfShots = Stats.BurstNumberOfShots;
+        BurstShotFireRate = Stats.BurstShotFireRate;
     }
 
     /// <summary>

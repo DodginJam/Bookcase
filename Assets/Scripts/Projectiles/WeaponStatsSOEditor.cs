@@ -12,6 +12,11 @@ public class WeaponStatsSOEditor : Editor
 
     private SerializedProperty ChargeTimeProp
     { get; set; }
+    private SerializedProperty BurstNumberOfShotsProp
+    { get; set; }
+
+    private SerializedProperty BurstShotFireRateProp
+    { get; set; }
 
     public override void OnInspectorGUI()
     {
@@ -30,7 +35,15 @@ public class WeaponStatsSOEditor : Editor
 
             EditorGUILayout.PropertyField(ChargeTimeProp);
         }
+        else if ((FireMode)FireModeStateProp.enumValueIndex == FireMode.Burst)
+        {
+            EditorGUILayout.LabelField("Burst Fire Mode Settings", EditorStyles.boldLabel);
 
+            EditorGUILayout.PropertyField(BurstNumberOfShotsProp);
+
+            EditorGUILayout.PropertyField(BurstShotFireRateProp);
+        }
+        
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -42,5 +55,8 @@ public class WeaponStatsSOEditor : Editor
 
         ChargeTimeProp = serializedObject.FindProperty("<ChargeTime>k__BackingField");
 
+        BurstNumberOfShotsProp = serializedObject.FindProperty("<BurstNumberOfShots>k__BackingField");
+
+        BurstShotFireRateProp = serializedObject.FindProperty("<BurstShotFireRate>k__BackingField");
     }
 }

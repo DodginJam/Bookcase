@@ -27,6 +27,20 @@ public class WeaponStatsSO : ScriptableObject
     public float ChargeTime
     { get; set; } = 1.0f;
 
+    /// <summary>
+    /// For exclusive use of the burst fire mode, number of projectiles in the burst.
+    /// </summary>
+    [field: SerializeField, Min(1), HideInInspector, Tooltip("For exclusive use of the burst fire mode, number of projectiles in the burst. - exposed via Editor.")]
+    public int BurstNumberOfShots
+    { get; set; } = 3;
+
+    /// <summary>
+    /// For exclusive use of the burst fire mode, time between each shot within the burst. - exposed via Editor.
+    /// </summary>
+    [field: SerializeField, Min(0.01f), HideInInspector, Tooltip("For exclusive use of the burst fire mode, time between each shot within the burst. - exposed via Editor.")]
+    public float BurstShotFireRate
+    { get; set; } = 0.1f;
+
     public event Action UpdateLinkedWeapons;
 
     public void UpdateLinkedWeaponValues()
