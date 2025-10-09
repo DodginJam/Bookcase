@@ -137,6 +137,11 @@ public class PlayerController : MonoBehaviour
 
         if (CharacterControllerComp != null & InputHandler != null)
         {
+            if (InputHandler.MovementInput.x == 0 && InputHandler.MovementInput.y == 0)
+            {
+                return;
+            }
+
             // Only output the X and Z axis of movement, taken from the Vector2 of the input movement.
             Vector3 globalMovement = new Vector3(InputHandler.MovementInput.x, 0, InputHandler.MovementInput.y);
 
@@ -156,6 +161,11 @@ public class PlayerController : MonoBehaviour
     {
         if (CharacterControllerComp != null & InputHandler != null)
         {
+            if (InputHandler.RotationInput.x == 0)
+            {
+                return;
+            }
+
             // The player object should rotate on only the Y axis to allow change in X and Z movement direction.
             Vector3 globalRotation = new Vector3(0, InputHandler.RotationInput.x, 0);
 
