@@ -7,7 +7,7 @@ public class WeaponStatsSOEditor : Editor
     public WeaponStatsSO WeaponSO
     {  get; set; }
 
-    public SerializedProperty FireModeStateProp
+    public SerializedProperty WeaponTypeProp
     { get; set; }
 
     private SerializedProperty ChargeTimeProp
@@ -29,21 +29,24 @@ public class WeaponStatsSOEditor : Editor
             WeaponSO.UpdateLinkedWeaponValues();
         }
 
-        if ((FireMode)FireModeStateProp.enumValueIndex == FireMode.Charge)
+        // Apply serialized changes before reading values
+        serializedObject.Update();
+
+        // Assuming WeaponTypeProp is a SerializedProperty that holds an object reference
+        var weaponTypeObj = WeaponTypeProp.objectReferenceValue;
+
+        if (weaponTypeObj is ChargeSO)
         {
             EditorGUILayout.LabelField("Charge Fire Mode Settings", EditorStyles.boldLabel);
-
             EditorGUILayout.PropertyField(ChargeTimeProp);
         }
-        else if ((FireMode)FireModeStateProp.enumValueIndex == FireMode.Burst)
+        else if (weaponTypeObj is BurstSO)
         {
             EditorGUILayout.LabelField("Burst Fire Mode Settings", EditorStyles.boldLabel);
-
             EditorGUILayout.PropertyField(BurstNumberOfShotsProp);
-
             EditorGUILayout.PropertyField(BurstShotFireRateProp);
         }
-        
+
         serializedObject.ApplyModifiedProperties();
     }
 
@@ -51,7 +54,7 @@ public class WeaponStatsSOEditor : Editor
     {
         WeaponSO = (WeaponStatsSO)target;
 
-        FireModeStateProp = serializedObject.FindProperty("<FireModeState>k__BackingField");
+        WeaponTypeProp = serializedObject.FindProperty("<WeaponType>k__BackingField");
 
         ChargeTimeProp = serializedObject.FindProperty("<ChargeTime>k__BackingField");
 

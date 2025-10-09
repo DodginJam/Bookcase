@@ -17,7 +17,7 @@ public class WeaponStatsSO : ScriptableObject
     { get; private set; } = 30;
 
     [field: SerializeField]
-    public FireMode FireModeState
+    public WeaponTypeSO WeaponType
     { get; private set; }
 
     /// <summary>
@@ -47,12 +47,4 @@ public class WeaponStatsSO : ScriptableObject
     {
         UpdateLinkedWeapons?.Invoke();
     }
-}
-
-public enum FireMode
-{
-    FullAuto,
-    SemiAuto,
-    Burst,
-    Charge
 }

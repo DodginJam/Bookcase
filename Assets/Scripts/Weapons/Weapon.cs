@@ -2,7 +2,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Windows;
 using static IInteractable;
 
 [DefaultExecutionOrder(-1)]
@@ -21,7 +20,8 @@ public class Weapon : MonoBehaviour, IInteractable
     public int AmmoClipSize
     { get; private set; } = 30;
 
-    public FireMode FireModeState
+    [field: SerializeField]
+    public WeaponTypeSO WeaponType
     { get; private set; }
 
     /// <summary>
@@ -67,22 +67,7 @@ public class Weapon : MonoBehaviour, IInteractable
     public float CoolDownTimer
     { get; set; }
 
-    /// <summary>
-    /// Holds reference to the routine for allow full-auto fire.
-    /// </summary>
-    public Coroutine AutoFire
-    { get; set; }
-
-    /// <summary>
-    /// Holds reference to the routine for allow charging fire.
-    /// </summary>
-    public Coroutine ChargeFire
-    { get; set; }
-
-    /// <summary>
-    /// Holds reference to the routine for allow burst fire.
-    /// </summary>
-    public Coroutine BurstFire
+    public Coroutine FireRoutine
     { get; set; }
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -184,31 +169,7 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         IsTriggerHeld = true;
 
-        if (FireModeState == FireMode.SemiAuto)
-        {
-            if (WeaponCooldown == false)
-            {
-                FireProjectile();
-            }
-        }
-        else if (FireModeState == FireMode.FullAuto)
-        {
-            AutoFire = StartCoroutine(StartAutoFire());
-        }
-        else if (FireModeState == FireMode.Burst)
-        {
-            if (WeaponCooldown == false && BurstFire == null)
-            {
-                BurstFire = StartCoroutine(BurstingFire());
-            }
-        }
-        else if (FireModeState == FireMode.Charge)
-        {
-            if (WeaponCooldown == false)
-            {
-                ChargeFire = StartCoroutine(ChargingFire());
-            }
-        }
+        WeaponType.OnFirePressed(this);
     }
 
     /// <summary>
@@ -217,84 +178,6 @@ public class Weapon : MonoBehaviour, IInteractable
     public void FireReleased()
     {
         IsTriggerHeld = false;
-    }
-
-    /// <summary>
-    /// For Full Auto fire, ensures firerate is managed every frame when trigger is held down.
-    /// </summary>
-    /// <returns></returns>
-    public IEnumerator StartAutoFire()
-    {
-        while (IsTriggerHeld)
-        {
-            if (WeaponCooldown == false)
-            {
-                FireProjectile();
-            }
-
-            yield return null;
-        }
-    }
-
-    public IEnumerator ChargingFire()
-    {
-        float chargeTimer = ChargeTime;
-
-        while (IsTriggerHeld)
-        {
-            if (chargeTimer > 0)
-            {
-                chargeTimer -= Time.deltaTime;
-            }
-
-            if (chargeTimer <= 0)
-            {
-                FireProjectile();
-                break;
-            }
-
-            yield return null;
-        }
-    }
-
-    public IEnumerator BurstingFire()
-    {
-        int shotsLeftInBurst = BurstNumberOfShots;
-
-        float burstTimer = 0;
-
-        while (shotsLeftInBurst > 0)
-        {
-            if (WeaponCooldown == false)
-            {
-                if (burstTimer > 0)
-                {
-                    burstTimer -= Time.deltaTime;
-                }
-
-                if (burstTimer <= 0)
-                {
-                    FireProjectile(false);
-                    shotsLeftInBurst--;
-
-                    if (shotsLeftInBurst > 0)
-                    {
-                        burstTimer = BurstShotFireRate;
-                    }
-                    else if (shotsLeftInBurst <= 0)
-                    {
-                        WeaponCooldown = true;
-                        break;
-                    }
-                }
-            }
-
-            yield return null;
-        }
-
-        // Ensure the burst fire Coroutine reference is set to clear and reset the cooldown timer for between burst shots.
-        BurstFire = null;
-        // CoolDownTimer = FireRatePerSecond;
     }
 
     /// <summary>
@@ -368,7 +251,7 @@ public class Weapon : MonoBehaviour, IInteractable
         FireRatePerSecond = Stats.FireRatePerSecond;
         ReloadTime = Stats.ReloadTime;
         AmmoClipSize = Stats.AmmoClipSize;
-        FireModeState = Stats.FireModeState;
+        WeaponType = Stats.WeaponType;
         ChargeTime = Stats.ChargeTime;
         BurstNumberOfShots = Stats.BurstNumberOfShots;
         BurstShotFireRate = Stats.BurstShotFireRate;
