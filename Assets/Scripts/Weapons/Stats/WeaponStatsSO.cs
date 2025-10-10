@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create New WeaponStatsSO")]
+[CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create WeaponStatsSO")]
 public class WeaponStatsSO : ScriptableObject
 {
     [field: SerializeField, Min(0.001f)]

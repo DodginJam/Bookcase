@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New BurstSO", menuName = "Create New BurstSO")]
+[CreateAssetMenu(fileName = "New Burst Weapon Type", menuName = "WeaponTypeSO/BurstSO")]
 public class BurstSO : WeaponTypeSO
 {
     public override void OnTriggerPress(Weapon weapon)

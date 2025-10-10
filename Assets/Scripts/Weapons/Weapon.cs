@@ -73,7 +73,7 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public event Action<bool> TriggerReleaseEvents;
 
-    public event Action<bool> OnWeaponShoot;
+    public event Action<bool> WeaponShootEvents;
 
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -142,12 +142,12 @@ public class Weapon : MonoBehaviour, IInteractable
     
     void SetUpWeaponListeners()
     {
-        OnWeaponShoot += TestTriggerLog;
+        WeaponShootEvents += TestTriggerLog;
     }
 
     void RemoveWeaponListeners()
     {
-        OnWeaponShoot -= TestTriggerLog;
+        WeaponShootEvents -= TestTriggerLog;
     }
 
     void TestTriggerLog(bool successStatus)
@@ -284,7 +284,7 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public void ShootWeaponEventInvoke(bool successfullShoot)
     {
-        OnWeaponShoot?.Invoke(successfullShoot);
+        WeaponShootEvents?.Invoke(successfullShoot);
     }
 
     /// <summary>

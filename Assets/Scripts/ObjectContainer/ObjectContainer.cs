@@ -105,16 +105,6 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
         InitialiseAndValidateContainedObjectOnAwake();
     }
 
-    void Start()
-    {
-
-    }
-
-    void Update()
-    {
-
-    }
-
     public void InitialiseAndValidateContainedObjectOnAwake()
     {
         // Validate the circumstances for the contained object to always appear as a single instantiated gameobject starting at the transform point if it is set to spawn or if an valid object has already been manually placed within.

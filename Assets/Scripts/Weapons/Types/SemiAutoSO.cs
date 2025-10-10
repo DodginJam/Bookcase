@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New SemiAutoSO", menuName = "Create New SemiAutoSO")]
+[CreateAssetMenu(fileName = "New SemiAuto Weapon Type", menuName = "WeaponTypeSO/SemiAutoSO")]
 public class SemiAutoSO : WeaponTypeSO
 {
     public override void OnTriggerPress(Weapon weapon)
