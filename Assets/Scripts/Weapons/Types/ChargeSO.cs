@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New Charge Weapon Type", menuName = "WeaponTypeSO/ChargeSO")]
-public class ChargeSO : WeaponTypeSO
+[CreateAssetMenu(fileName = "New Charge WeaponBehaviour", menuName = "WeaponBehaviourSO/ChargeSO")]
+public class ChargeSO : WeaponBehaviourSO
 {
     public float ChargeTimer
     {  get; set; }

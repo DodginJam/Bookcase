@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System;
 
-public abstract class WeaponTypeSO : ScriptableObject
+public abstract class WeaponBehaviourSO : ScriptableObject
 {
     public abstract void OnTriggerPress(Weapon weapon);
 

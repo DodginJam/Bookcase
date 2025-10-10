@@ -7,8 +7,8 @@ using static IInteractable;
 [DefaultExecutionOrder(-1)]
 public class Weapon : MonoBehaviour, IInteractable
 {
-    [field: SerializeField, Header("Weapon Stats Properties")]
-    public WeaponStatsSO Stats
+    [field: SerializeField, Header("Weapon WeaponData Properties")]
+    public WeaponDataSO WeaponData
     { get; set; }
 
     public float FireRatePerSecond
@@ -20,7 +20,7 @@ public class Weapon : MonoBehaviour, IInteractable
     public int AmmoClipSize
     { get; private set; } = 30;
 
-    public WeaponTypeSO WeaponType
+    public WeaponBehaviourSO WeaponBehaviour
     { get; set; }
 
     /// <summary>
@@ -120,10 +120,10 @@ public class Weapon : MonoBehaviour, IInteractable
         }
 
         // Init of the stats from the SO reference.
-        SetWeaponStats();
+        SetWeaponData();
 
         // Set up the listeners for the SO to allow changes to be pushed to runtime instances that are using the SO data.
-        Stats.UpdateLinkedWeapons += SetWeaponStats;
+        WeaponData.UpdateLinkedWeapons += SetWeaponData;
 
         // Sets up the object pooling.
         InstantiateProjectilesForPooling(ProjectilePoolingParent, AmmoClipSize * 3);
@@ -134,9 +134,9 @@ public class Weapon : MonoBehaviour, IInteractable
 
     private void OnDestroy()
     {
-        if (Stats != null)
+        if (WeaponData != null)
         {
-            Stats.UpdateLinkedWeapons -= SetWeaponStats;
+            WeaponData.UpdateLinkedWeapons -= SetWeaponData;
         }
     }
     
@@ -200,7 +200,7 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         IsTriggerHeld = true;
 
-        WeaponType.OnTriggerPress(this);
+        WeaponBehaviour.OnTriggerPress(this);
     }
 
     /// <summary>
@@ -210,7 +210,7 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         IsTriggerHeld = false;
 
-        WeaponType.OnTriggerRelease(this);
+        WeaponBehaviour.OnTriggerRelease(this);
     }
 
     /// <summary>
@@ -290,25 +290,25 @@ public class Weapon : MonoBehaviour, IInteractable
     /// <summary>
     /// Initialise the stats from the scriptable object reference.
     /// </summary>
-    public void SetWeaponStats()
+    public void SetWeaponData()
     {
-        if (Stats == null)
+        if (WeaponData == null)
         {
-            Stats = ScriptableObject.CreateInstance<WeaponStatsSO>();
+            WeaponData = ScriptableObject.CreateInstance<WeaponDataSO>();
             Debug.LogWarning($"The starting values for {this.name} of type {this.GetType()} were null on awake");
         }
 
-        FireRatePerSecond = Stats.FireRatePerSecond;
-        ReloadTime = Stats.ReloadTime;
-        AmmoClipSize = Stats.AmmoClipSize;
+        FireRatePerSecond = WeaponData.FireRatePerSecond;
+        ReloadTime = WeaponData.ReloadTime;
+        AmmoClipSize = WeaponData.AmmoClipSize;
 
         RemoveWeaponListeners();
-        WeaponType = Stats.WeaponType;
+        WeaponBehaviour = WeaponData.WeaponBehaviour;
         SetUpWeaponListeners();
 
-        ChargeTime = Stats.ChargeTime;
-        BurstNumberOfShots = Stats.BurstNumberOfShots;
-        BurstShotFireRate = Stats.BurstShotFireRate;
+        ChargeTime = WeaponData.ChargeTime;
+        BurstNumberOfShots = WeaponData.BurstNumberOfShots;
+        BurstShotFireRate = WeaponData.BurstShotFireRate;
     }
 
     /// <summary>

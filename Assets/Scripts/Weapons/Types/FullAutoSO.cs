@@ -2,8 +2,8 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New FullAuto Weapon Type", menuName = "WeaponTypeSO/FullAutoSO")]
-public class FullAutoSO : WeaponTypeSO
+[CreateAssetMenu(fileName = "New FullAuto WeaponBehaviour", menuName = "WeaponBehaviourSO/FullAutoSO")]
+public class FullAutoSO : WeaponBehaviourSO
 {
     public override void OnTriggerPress(Weapon weapon)
     {

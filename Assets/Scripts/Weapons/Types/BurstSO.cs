@@ -2,14 +2,14 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-[CreateAssetMenu(fileName = "New Burst Weapon Type", menuName = "WeaponTypeSO/BurstSO")]
-public class BurstSO : WeaponTypeSO
+[CreateAssetMenu(fileName = "New Burst WeaponBehaviour", menuName = "WeaponBehaviourSO/BurstSO")]
+public class BurstSO : WeaponBehaviourSO
 {
     public override void OnTriggerPress(Weapon weapon)
     {
         if (weapon.WeaponCooldown == false && weapon.FireRoutine == null)
         {
-            weapon.FireRoutine = weapon.StartCoroutine(BurstingFire(weapon, this));
+            weapon.FireRoutine = weapon.StartCoroutine(BurstingFire(weapon));
             weapon.TriggerPullEventInvoke(true);
         }
         else
@@ -23,7 +23,7 @@ public class BurstSO : WeaponTypeSO
         weapon.TriggerReleaseEventInvoke(true);
     }
 
-    public IEnumerator BurstingFire(Weapon weapon, WeaponTypeSO weaponTypeSO)
+    public IEnumerator BurstingFire(Weapon weapon)
     {
         int shotsLeftInBurst = weapon.BurstNumberOfShots;
 

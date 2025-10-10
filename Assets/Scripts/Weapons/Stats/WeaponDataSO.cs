@@ -1,8 +1,8 @@
 using System;
 using UnityEngine;
 
-[CreateAssetMenu(fileName = "New WeaponStatsSO", menuName = "Create WeaponStatsSO")]
-public class WeaponStatsSO : ScriptableObject
+[CreateAssetMenu(fileName = "New WeaponDataSO", menuName = "Create WeaponDataSO")]
+public class WeaponDataSO : ScriptableObject
 {
     [field: SerializeField, Min(0.001f)]
     public float FireRatePerSecond
@@ -17,7 +17,7 @@ public class WeaponStatsSO : ScriptableObject
     { get; private set; } = 30;
 
     [field: SerializeField]
-    public WeaponTypeSO WeaponType
+    public WeaponBehaviourSO WeaponBehaviour
     { get; private set; }
 
     /// <summary>

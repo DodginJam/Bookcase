@@ -1,13 +1,13 @@
 using UnityEditor;
 using UnityEngine;
 
-[CustomEditor(typeof(WeaponStatsSO))]
-public class WeaponStatsSOEditor : Editor
+[CustomEditor(typeof(WeaponDataSO))]
+public class WeaponDataSOEditor : Editor
 {
-    public WeaponStatsSO WeaponSO
+    public WeaponDataSO WeaponSO
     {  get; set; }
 
-    public SerializedProperty WeaponTypeProp
+    public SerializedProperty WeaponBehaviourProp
     { get; set; }
 
     private SerializedProperty ChargeTimeProp
@@ -32,8 +32,8 @@ public class WeaponStatsSOEditor : Editor
         // Apply serialized changes before reading values
         serializedObject.Update();
 
-        // Assuming WeaponTypeProp is a SerializedProperty that holds an object reference
-        var weaponTypeObj = WeaponTypeProp.objectReferenceValue;
+        // Assuming WeaponBehaviourProp is a SerializedProperty that holds an object reference
+        var weaponTypeObj = WeaponBehaviourProp.objectReferenceValue;
 
         if (weaponTypeObj is ChargeSO)
         {
@@ -52,9 +52,9 @@ public class WeaponStatsSOEditor : Editor
 
     private void OnEnable()
     {
-        WeaponSO = (WeaponStatsSO)target;
+        WeaponSO = (WeaponDataSO)target;
 
-        WeaponTypeProp = serializedObject.FindProperty("<WeaponType>k__BackingField");
+        WeaponBehaviourProp = serializedObject.FindProperty("<WeaponBehaviour>k__BackingField");
 
         ChargeTimeProp = serializedObject.FindProperty("<ChargeTime>k__BackingField");
 
