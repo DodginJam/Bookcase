@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 79b9ce3057f84854a84206a009641a1c, type: 3}
+  m_Name: SemiAutoWeaponData001
+  m_EditorClassIdentifier: 
+  <FireRatePerSecond>k__BackingField: 0.25
+  <ReloadTime>k__BackingField: 1
+  <AmmoClipSize>k__BackingField: 30
+  <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: ea855993eba67524bbdc481d6d6e256c, type: 2}
+  <SoundsSO>k__BackingField: {fileID: 11400000, guid: 278bf6a8b626f8741b1bf16e9caeda65, type: 2}
+  <ChargeTime>k__BackingField: 1
+  <BurstNumberOfShots>k__BackingField: 3
+  <BurstShotFireRate>k__BackingField: 0.1

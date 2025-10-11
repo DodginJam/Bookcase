@@ -20,6 +20,10 @@ public class WeaponDataSO : ScriptableObject
     public WeaponBehaviourSO WeaponBehaviour
     { get; private set; }
 
+    [field: SerializeField]
+    public WeaponSoundsSO SoundsSO
+    { get; private set; }
+
     /// <summary>
     /// For exclusive use of the charge fire mode, time to charge for shot to fire - exposed via Editor.
     /// </summary>
@@ -46,5 +50,10 @@ public class WeaponDataSO : ScriptableObject
     public void UpdateLinkedWeaponValues()
     {
         UpdateLinkedWeapons?.Invoke();
+    }
+
+    public void ClearLinkedWeaponValues()
+    {
+        UpdateLinkedWeapons = null;
     }
 }

@@ -9,9 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ef466f2fdc6747b4a9da75587def9335, type: 3}
-  m_Name: TestSemiAutoSoundSO
+  m_Script: {fileID: 11500000, guid: 6277711021e1f7a4c8caae2955807f6c, type: 3}
+  m_Name: BurstWeaponBehaviour001
   m_EditorClassIdentifier: 
-  <TriggerPull>k__BackingField: {fileID: 0}
-  <TriggerRelease>k__BackingField: {fileID: 0}
-  <FireProjectile>k__BackingField: {fileID: 0}

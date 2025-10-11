@@ -9,10 +9,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5a26b4f567df2d4479d44ff962f1b9b0, type: 3}
-  m_Name: TestFullAutoSoundSO
+  m_Script: {fileID: 11500000, guid: 8e042623803394041b64adb33f6bc2f5, type: 3}
+  m_Name: SemiAutoWeaponBehaviour001
   m_EditorClassIdentifier: 
-  <TriggerPull>k__BackingField: {fileID: 0}
-  <TriggerRelease>k__BackingField: {fileID: 0}
-  <FireProjectile>k__BackingField: {fileID: 0}
-  <BackingFire>k__BackingField: {fileID: 0}

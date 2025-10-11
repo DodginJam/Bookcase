@@ -9,12 +9,12 @@ public class FullAutoSO : WeaponBehaviourSO
     {
         weapon.FireRoutine = weapon.StartCoroutine(StartAutoFire(weapon));
 
-        weapon.TriggerPullEventInvoke(true);
+        weapon.TriggerPullSuccessEventInvoke();
     }
 
     public override void OnTriggerRelease(Weapon weapon)
     {
-        weapon.TriggerReleaseEventInvoke(true);
+        weapon.TriggerReleaseSuccessEventInvoke();
     }
 
     /// <summary>

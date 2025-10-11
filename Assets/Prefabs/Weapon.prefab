@@ -357,7 +357,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 69469050a0ca2924aa54ca0eb309ecd3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  <WeaponData>k__BackingField: {fileID: 11400000, guid: a229a0814555f4a4e90a7e55bc748a36, type: 2}
+  <WeaponData>k__BackingField: {fileID: 11400000, guid: 7de6c19ecbc8bf74193a698c35ba9362, type: 2}
   <FirePosition>k__BackingField: {fileID: 7484759627373128764}
   <ProjectilePrefab>k__BackingField: {fileID: 1045022235505385638, guid: 8ffb63c6726ced74fa7a4800f8455444, type: 3}
   <ProjectilePoolingParent>k__BackingField: {fileID: 1537072160224862654}
@@ -389,7 +389,7 @@ AudioSource:
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
   m_PlayOnAwake: 0
-  m_Volume: 1
+  m_Volume: 0.3
   m_Pitch: 1
   Loop: 0
   Mute: 0

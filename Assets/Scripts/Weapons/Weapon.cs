@@ -23,6 +23,9 @@ public class Weapon : MonoBehaviour, IInteractable
     public WeaponBehaviourSO WeaponBehaviour
     { get; set; }
 
+    public WeaponSoundsSO SoundsSO
+    { get; private set; }
+
     /// <summary>
     /// For exclusive use of the charge fire mode, time to charge for shot to fire.
     /// </summary>
@@ -69,11 +72,14 @@ public class Weapon : MonoBehaviour, IInteractable
     public Coroutine FireRoutine
     { get; set; }
 
-    public event Action<bool> TriggerPullEvents;
+    public event Action<Weapon> TriggerPullSuccessEvents;
+    public event Action<Weapon> TriggerPullFailEvents;
 
-    public event Action<bool> TriggerReleaseEvents;
+    public event Action<Weapon> TriggerReleaseSuccessEvents;
+    public event Action<Weapon> TriggerReleaseFailEvents;
 
-    public event Action<bool> WeaponShootEvents;
+    public event Action<Weapon> WeaponShootSuccessEvents;
+    public event Action<Weapon> WeaponShootFailEvents;
 
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -100,6 +106,9 @@ public class Weapon : MonoBehaviour, IInteractable
     public InteractionCentrePoint InteractionCentre
     { get; set; }
 
+    public WeaponSoundEmitter SoundEmitter
+    { get; set; }
+
 
     void Awake()
     {
@@ -117,6 +126,15 @@ public class Weapon : MonoBehaviour, IInteractable
         {
             Debug.Log("Fire Position transform not assigned so defaulted to the weapon transform itself.");
             FirePosition = transform;
+        }
+
+        if (TryGetComponent<WeaponSoundEmitter>(out WeaponSoundEmitter soundEmitter))
+        {
+            SoundEmitter = soundEmitter;
+        }
+        else
+        {
+            gameObject.AddComponent<WeaponSoundEmitter>();
         }
 
         // Init of the stats from the SO reference.
@@ -142,27 +160,18 @@ public class Weapon : MonoBehaviour, IInteractable
     
     void SetUpWeaponListeners()
     {
-        WeaponShootEvents += TestTriggerLog;
+        if (SoundsSO != null && SoundEmitter != null)
+        {
+            SoundsSO.SetUpWeaponListeners(this);
+        }
     }
 
     void RemoveWeaponListeners()
     {
-        WeaponShootEvents -= TestTriggerLog;
-    }
-
-    void TestTriggerLog(bool successStatus)
-    {
-        string message;
-        if (successStatus)
+        if (SoundsSO != null && SoundEmitter != null)
         {
-            message = "Weapon Shoot Event Fired - Success";
+            SoundsSO.RemoveWeaponListeners(this);
         }
-        else
-        {
-            message = "Weapon Shoot Event Fired - Failed";
-        }
-
-        Debug.Log(message);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -243,7 +252,7 @@ public class Weapon : MonoBehaviour, IInteractable
             }
         }
 
-        ShootWeaponEventInvoke(true);
+        ShootWeaponSuccessEventInvoke();
 
         // After a projectile is fired, ensure the weaponcooldown flag is set to allow countdown for next chance to fire to start.
         WeaponCooldown = setCooldown;
@@ -272,20 +281,36 @@ public class Weapon : MonoBehaviour, IInteractable
         IsTriggerHeld = false;
     }
 
-    public void TriggerPullEventInvoke(bool successfulTriggerPull)
+    public void TriggerPullSuccessEventInvoke()
     {
-        TriggerPullEvents?.Invoke(successfulTriggerPull);
+        TriggerPullSuccessEvents?.Invoke(this);
     }
 
-    public void TriggerReleaseEventInvoke(bool successfulTriggerRelease)
+    public void TriggerPullFailEventInvoke()
     {
-        TriggerReleaseEvents?.Invoke(successfulTriggerRelease);
+        TriggerPullFailEvents?.Invoke(this);
     }
 
-    public void ShootWeaponEventInvoke(bool successfullShoot)
+    public void TriggerReleaseSuccessEventInvoke()
     {
-        WeaponShootEvents?.Invoke(successfullShoot);
+        TriggerReleaseSuccessEvents?.Invoke(this);
     }
+
+    public void TriggerReleaseFailEventInvoke()
+    {
+        TriggerReleaseFailEvents?.Invoke(this);
+    }
+
+    public void ShootWeaponSuccessEventInvoke()
+    {
+        WeaponShootSuccessEvents?.Invoke(this);
+    }
+
+    public void ShootWeaponFailEventInvoke()
+    {
+        WeaponShootFailEvents?.Invoke(this);
+    }
+
 
     /// <summary>
     /// Initialise the stats from the scriptable object reference.
@@ -304,6 +329,7 @@ public class Weapon : MonoBehaviour, IInteractable
 
         RemoveWeaponListeners();
         WeaponBehaviour = WeaponData.WeaponBehaviour;
+        SoundsSO = WeaponData.SoundsSO;
         SetUpWeaponListeners();
 
         ChargeTime = WeaponData.ChargeTime;
@@ -381,5 +407,14 @@ public class Weapon : MonoBehaviour, IInteractable
             Gizmos.color = Color.red;
             Gizmos.DrawSphere(FirePosition.position, 0.025f);
         }
+    }
+
+    private void OnValidate()
+    {
+        WeaponData.ClearLinkedWeaponValues();
+
+        SetWeaponData();
+
+        WeaponData.UpdateLinkedWeapons += SetWeaponData;
     }
 }

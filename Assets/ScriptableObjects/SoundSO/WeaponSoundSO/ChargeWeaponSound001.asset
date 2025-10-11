@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b140c4d4140afb74ca82f2114bfe00f5, type: 3}
+  m_Name: ChargeWeaponSound001
+  m_EditorClassIdentifier: 
+  <TriggerPull>k__BackingField: {fileID: 8300000, guid: f8308e80e8057a84f940ef6d92d3d176, type: 3}
+  <TriggerPullFail>k__BackingField: {fileID: 8300000, guid: 04bfd28e3781ede409bbdcefa4759f79, type: 3}
+  <TriggerRelease>k__BackingField: {fileID: 8300000, guid: 9f2362ecf937fa940a8fb5da50c08452, type: 3}
+  <TriggerReleaseFail>k__BackingField: {fileID: 8300000, guid: 9f2362ecf937fa940a8fb5da50c08452, type: 3}
+  <FireProjectile>k__BackingField: {fileID: 8300000, guid: eea6419202474b44f9f3008e8b7b2c4b, type: 3}
+  <FireProjectileFail>k__BackingField: {fileID: 8300000, guid: 1f346cef4bbe2124380bcc1f3cc1939c, type: 3}
+  <Charging>k__BackingField: {fileID: 8300000, guid: d9b7ee984cc9ded4687a5a8f86a0c5ad, type: 3}

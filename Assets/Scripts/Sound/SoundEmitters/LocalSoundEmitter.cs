@@ -17,4 +17,29 @@ public class LocalSoundEmitter : MonoBehaviour
             AudioSourceComp = gameObject.AddComponent<AudioSource>();
         }
     }
+
+    public void PlayOneShot(AudioClip clipToPlay)
+    {
+        if (AudioSourceComp != null)
+        {
+            AudioSourceComp.PlayOneShot(clipToPlay);
+        }
+    }
+
+    public void PlaySoundMain(AudioClip clipToPlay)
+    {
+        if (AudioSourceComp != null)
+        {
+            AudioSourceComp.clip = clipToPlay;
+            AudioSourceComp.Play();
+        }
+    }
+
+    public void StopSoundMain()
+    {
+        if (AudioSourceComp != null)
+        {
+            AudioSourceComp.clip = null;
+        }
+    }
 }
