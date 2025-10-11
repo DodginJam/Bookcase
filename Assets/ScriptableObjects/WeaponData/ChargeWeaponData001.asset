@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: ChargeWeaponData001
   m_EditorClassIdentifier: 
   <FireRatePerSecond>k__BackingField: 0.75
-  <ReloadTime>k__BackingField: 1
-  <AmmoClipSize>k__BackingField: 30
+  <ReloadTime>k__BackingField: 3
+  <AmmoClipSize>k__BackingField: 5
   <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: 297f1771a6a22c14c95f8c14f98ccf78, type: 2}
   <SoundsSO>k__BackingField: {fileID: 11400000, guid: f6d118e0d58efdb4282560b02e117fc6, type: 2}
   <ChargeTime>k__BackingField: 2.022

@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b9ce3057f84854a84206a009641a1c, type: 3}
   m_Name: BurstWeaponData001
   m_EditorClassIdentifier: 
-  <FireRatePerSecond>k__BackingField: 0.1
-  <ReloadTime>k__BackingField: 1
-  <AmmoClipSize>k__BackingField: 30
+  <FireRatePerSecond>k__BackingField: 0.4
+  <ReloadTime>k__BackingField: 3
+  <AmmoClipSize>k__BackingField: 25
   <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: e752af5db4a485d4293c4235a77d10d6, type: 2}
   <SoundsSO>k__BackingField: {fileID: 11400000, guid: 6fa1426c317dbba428c92894289612c2, type: 2}
   <ChargeTime>k__BackingField: 1
   <BurstNumberOfShots>k__BackingField: 3
-  <BurstShotFireRate>k__BackingField: 0.1
+  <BurstShotFireRate>k__BackingField: 0.04

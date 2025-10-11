@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: FullAutoWeaponData001
   m_EditorClassIdentifier: 
   <FireRatePerSecond>k__BackingField: 0.1
-  <ReloadTime>k__BackingField: 1
+  <ReloadTime>k__BackingField: 4
   <AmmoClipSize>k__BackingField: 30
   <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: 210e2cede89140f4eac65c4f26adacb2, type: 2}
   <SoundsSO>k__BackingField: {fileID: 11400000, guid: 293756426d95d5e4b864aef1bc7edaf8, type: 2}

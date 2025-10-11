@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79b9ce3057f84854a84206a009641a1c, type: 3}
   m_Name: SemiAutoWeaponData001
   m_EditorClassIdentifier: 
-  <FireRatePerSecond>k__BackingField: 0.25
-  <ReloadTime>k__BackingField: 1
-  <AmmoClipSize>k__BackingField: 30
+  <FireRatePerSecond>k__BackingField: 0.2
+  <ReloadTime>k__BackingField: 2
+  <AmmoClipSize>k__BackingField: 12
   <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: ea855993eba67524bbdc481d6d6e256c, type: 2}
   <SoundsSO>k__BackingField: {fileID: 11400000, guid: 278bf6a8b626f8741b1bf16e9caeda65, type: 2}
   <ChargeTime>k__BackingField: 1
