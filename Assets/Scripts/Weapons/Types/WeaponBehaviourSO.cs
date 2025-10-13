@@ -35,7 +35,7 @@ public abstract class WeaponBehaviourSO : ScriptableObject
 
         weapon.ReloadCoroutine = null;
 
-        Debug.Log("Reload Timer Finished");
+        weapon.FillAmmoClip();
     }
 
     public void CancelFiringRoutine(Weapon weapon)

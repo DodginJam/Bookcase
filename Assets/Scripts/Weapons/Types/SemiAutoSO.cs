@@ -11,8 +11,15 @@ public class SemiAutoSO : WeaponBehaviourSO
 
         if (weapon.WeaponCooldown == false)
         {
-            weapon.FireProjectile();
-            weapon.TriggerPullSuccessEventInvoke();
+            if (weapon.TryGetAmmoValueFromClip(1, out _))
+            {
+                weapon.FireProjectile();
+                weapon.TriggerPullSuccessEventInvoke();
+            }
+            else
+            {
+                weapon.TriggerPullFailEventInvoke();
+            }
         }
         else
         {

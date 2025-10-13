@@ -10,8 +10,6 @@ public class FullAutoSO : WeaponBehaviourSO
         weapon.CanReload = false;
 
         weapon.FireRoutine = weapon.StartCoroutine(StartAutoFire(weapon));
-
-        weapon.TriggerPullSuccessEventInvoke();
     }
 
     public override void OnTriggerRelease(Weapon weapon)
@@ -27,11 +25,25 @@ public class FullAutoSO : WeaponBehaviourSO
     /// <returns></returns>
     public IEnumerator StartAutoFire(Weapon weapon)
     {
+        bool isAmmoAvailable = weapon.TryGetAmmoValueFromClip(1, out _);
+
+        if (isAmmoAvailable)
+        {
+            weapon.TriggerPullSuccessEventInvoke();
+        }
+        else
+        {
+            weapon.TriggerPullFailEventInvoke();
+        }
+
         while (weapon.IsTriggerHeld)
         {
             if (weapon.WeaponCooldown == false)
             {
-                weapon.FireProjectile();
+                if (weapon.TryGetAmmoValueFromClip(1, out _))
+                {
+                    weapon.FireProjectile();
+                }
             }
 
             yield return null;

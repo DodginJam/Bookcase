@@ -9,8 +9,15 @@ public class ChargeSO : WeaponBehaviourSO
     {
         if (weapon.WeaponCooldown == false)
         {
-            weapon.FireRoutine = weapon.StartCoroutine(ChargingFire(weapon));
-            weapon.TriggerPullSuccessEventInvoke();
+            if (weapon.TryGetAmmoValueFromClip(1, out _))
+            {
+                weapon.FireRoutine = weapon.StartCoroutine(ChargingFire(weapon));
+                weapon.TriggerPullSuccessEventInvoke();
+            }
+            else
+            {
+                weapon.TriggerPullFailEventInvoke();
+            }
         }
         else
         {

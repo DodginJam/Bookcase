@@ -282,6 +282,27 @@ public class Weapon : MonoBehaviour, IInteractable
         }
     }
 
+    public void FillAmmoClip()
+    {
+        CurrentAmmoInClip = AmmoClipSize;
+    }
+
+    public bool TryGetAmmoValueFromClip(int ammoNeeded, out int ammoAvailable)
+    {
+        bool isAmmoAvailable = CurrentAmmoInClip > 0;
+
+        if (isAmmoAvailable)
+        {
+            ammoAvailable = Mathf.Clamp(ammoNeeded, 1, CurrentAmmoInClip);
+        }
+        else
+        {
+            ammoAvailable = 0;
+        }
+        
+        return isAmmoAvailable;
+    }
+
     /// <summary>
     /// Accesses the object pooling and select an inactive projectile to activate and fire. Failsafe ensures new objects are instantiated if all objects are active in the pool.
     /// </summary>
@@ -316,6 +337,8 @@ public class Weapon : MonoBehaviour, IInteractable
 
         // After a projectile is fired, ensure the weaponcooldown flag is set to allow countdown for next chance to fire to start.
         WeaponCooldown = setCooldown;
+
+        CurrentAmmoInClip = Mathf.Clamp(CurrentAmmoInClip - 1, 0, AmmoClipSize);
     }
 
     /// <summary>
