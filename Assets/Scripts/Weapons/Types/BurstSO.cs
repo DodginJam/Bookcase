@@ -29,6 +29,8 @@ public class BurstSO : WeaponBehaviourSO
 
         float burstTimer = 0;
 
+        weapon.CanReload = false;
+
         while (shotsLeftInBurst > 0)
         {
             if (weapon.WeaponCooldown == false)
@@ -60,6 +62,7 @@ public class BurstSO : WeaponBehaviourSO
 
         // Ensure the burst fire Coroutine reference is set to clear and reset the cooldown timer for between burst shots.
         weapon.FireRoutine = null;
+        weapon.CanReload = true;
         // CoolDownTimer = FireRatePerSecond;
     }
 }

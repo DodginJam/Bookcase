@@ -21,16 +21,22 @@ public class Weapon : MonoBehaviour, IInteractable
     { get; private set; } = 30;
 
     public WeaponBehaviourSO WeaponBehaviour
-    { get; set; }
+    { get; private set; }
 
     public WeaponSoundsSO SoundsSO
     { get; private set; }
+
+    public int CurrentAmmoInClip
+    { get; private set; } = 0;
 
     /// <summary>
     /// For exclusive use of the charge fire mode, time to charge for shot to fire.
     /// </summary>
     public float ChargeTime
     { get; set; } = 1.0f;
+
+    public float ChargeTimer
+    { get; set; } = float.MaxValue;
 
     /// <summary>
     /// For exclusive use of the burst fire mode, number of projectiles in the burst.
@@ -67,11 +73,42 @@ public class Weapon : MonoBehaviour, IInteractable
     /// The internal timer counting down how long to wait between shots to maintain desired firerate.
     /// </summary>
     public float CoolDownTimer
-    { get; set; }
+    { get; private set; }
 
+    /// <summary>
+    /// Reference to the timer that countdown whether the weapon is eligable to fire the next projectile - assigned via the associated weapon behaviour provided.
+    /// </summary>
     public Coroutine FireRoutine
     { get; set; }
 
+
+    #region Reloading
+    /// <summary>
+    /// Flag to track if the weapon is currently reloading.
+    /// </summary>
+    public bool IsReloading
+    { get; set; } = false;
+
+    public bool canReload;
+    public bool CanReload
+    { 
+        get { return canReload; }
+        set { canReload = value; Debug.Log($"Can Reload {value}"); }
+    }
+
+    public Coroutine ReloadCoroutine
+    { get; set; }
+
+    /// <summary>
+    /// The interal timer counting down the reloading time where the weapon is unable to fire.
+    /// </summary>
+    public float ReloadTimer
+    { get; set; }
+    #endregion
+
+
+    // Events that allow additonal effects to be triggered via plugging in and out at given moments in the usage of the gun, such as firing off sound effects and VFX.
+    #region Events
     public event Action<Weapon> TriggerPullSuccessEvents;
     public event Action<Weapon> TriggerPullFailEvents;
 
@@ -80,6 +117,9 @@ public class Weapon : MonoBehaviour, IInteractable
 
     public event Action<Weapon> WeaponShootSuccessEvents;
     public event Action<Weapon> WeaponShootFailEvents;
+
+    public event Action<Weapon> ReloadPressEvent;
+    #endregion
 
 
     [field: SerializeField, Header("Projectile & Pooling")]
@@ -148,6 +188,8 @@ public class Weapon : MonoBehaviour, IInteractable
 
         // Initialise the interal cooldown time for firerate management.
         CoolDownTimer = FireRatePerSecond;
+
+        CanReload = true;
     }
 
     private void OnDestroy()
@@ -207,9 +249,12 @@ public class Weapon : MonoBehaviour, IInteractable
     /// </summary>
     public void TriggerPressed()
     {
-        IsTriggerHeld = true;
+        if (IsReloading == false)
+        {
+            IsTriggerHeld = true;
 
-        WeaponBehaviour.OnTriggerPress(this);
+            WeaponBehaviour.OnTriggerPress(this);
+        }
     }
 
     /// <summary>
@@ -219,7 +264,22 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         IsTriggerHeld = false;
 
-        WeaponBehaviour.OnTriggerRelease(this);
+        if (IsReloading == false)
+        {
+            WeaponBehaviour.OnTriggerRelease(this);
+        }
+    }
+
+    public void ReloadPressd()
+    {
+        if (IsReloading == false && CanReload == true)
+        {
+            IsReloading = true;
+
+            CanReload = false;
+
+            WeaponBehaviour.OnReloadPress(this);
+        }
     }
 
     /// <summary>
@@ -266,6 +326,7 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         playerInputs.AttackPress += TriggerPressed;
         playerInputs.AttackRelease += TriggerReleased;
+        playerInputs.ReloadPress += ReloadPressd;
     }
 
     /// <summary>
@@ -276,6 +337,7 @@ public class Weapon : MonoBehaviour, IInteractable
     {
         playerInputs.AttackPress -= TriggerPressed;
         playerInputs.AttackRelease -= TriggerReleased;
+        playerInputs.ReloadPress -= ReloadPressd;
 
         // Helps prevent issues with weapon on being dropped while firing, and being picked up again.
         IsTriggerHeld = false;
@@ -311,6 +373,11 @@ public class Weapon : MonoBehaviour, IInteractable
         WeaponShootFailEvents?.Invoke(this);
     }
 
+    public void ReloadWeaponEventInvoke()
+    {
+        ReloadPressEvent?.Invoke(this);
+    }
+
 
     /// <summary>
     /// Initialise the stats from the scriptable object reference.
@@ -335,6 +402,8 @@ public class Weapon : MonoBehaviour, IInteractable
         ChargeTime = WeaponData.ChargeTime;
         BurstNumberOfShots = WeaponData.BurstNumberOfShots;
         BurstShotFireRate = WeaponData.BurstShotFireRate;
+
+        CurrentAmmoInClip = AmmoClipSize;
     }
 
     /// <summary>

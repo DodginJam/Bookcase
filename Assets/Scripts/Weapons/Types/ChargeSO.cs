@@ -5,9 +5,6 @@ using System.Collections.Generic;
 [CreateAssetMenu(fileName = "New Charge WeaponBehaviour", menuName = "WeaponBehaviourSO/ChargeSO")]
 public class ChargeSO : WeaponBehaviourSO
 {
-    public float ChargeTimer
-    {  get; set; }
-
     public override void OnTriggerPress(Weapon weapon)
     {
         if (weapon.WeaponCooldown == false)
@@ -19,11 +16,13 @@ public class ChargeSO : WeaponBehaviourSO
         {
             weapon.TriggerPullFailEventInvoke();
         }
+
+        weapon.CanReload = false;
     }
 
     public override void OnTriggerRelease(Weapon weapon)
     {
-        if (ChargeTimer <= 0)
+        if (weapon.ChargeTimer <= 0)
         {
             weapon.TriggerReleaseSuccessEventInvoke();
         }
@@ -32,20 +31,22 @@ public class ChargeSO : WeaponBehaviourSO
             weapon.TriggerReleaseFailEventInvoke();
             weapon.ShootWeaponFailEventInvoke();
         }
+
+        weapon.CanReload = true;
     }
 
     public IEnumerator ChargingFire(Weapon weapon)
     {
-        ChargeTimer = weapon.ChargeTime;
+        weapon.ChargeTimer = weapon.ChargeTime;
 
         while (weapon.IsTriggerHeld)
         {
-            if (ChargeTimer > 0)
+            if (weapon.ChargeTimer > 0)
             {
-                ChargeTimer -= Time.deltaTime;
+                weapon.ChargeTimer -= Time.deltaTime;
             }
 
-            if (ChargeTimer <= 0)
+            if (weapon.ChargeTimer <= 0)
             {
                 weapon.FireProjectile();
                 break;

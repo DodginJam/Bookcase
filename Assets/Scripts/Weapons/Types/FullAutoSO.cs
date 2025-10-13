@@ -7,6 +7,8 @@ public class FullAutoSO : WeaponBehaviourSO
 {
     public override void OnTriggerPress(Weapon weapon)
     {
+        weapon.CanReload = false;
+
         weapon.FireRoutine = weapon.StartCoroutine(StartAutoFire(weapon));
 
         weapon.TriggerPullSuccessEventInvoke();
@@ -15,6 +17,8 @@ public class FullAutoSO : WeaponBehaviourSO
     public override void OnTriggerRelease(Weapon weapon)
     {
         weapon.TriggerReleaseSuccessEventInvoke();
+
+        weapon.CanReload = true;
     }
 
     /// <summary>

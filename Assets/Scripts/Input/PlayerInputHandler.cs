@@ -26,6 +26,8 @@ public class PlayerInputHandler : MonoBehaviour
 
     public event Action AttackRelease;
 
+    public event Action ReloadPress;
+
 
     private void Awake()
     {
@@ -106,6 +108,11 @@ public class PlayerInputHandler : MonoBehaviour
         }
     }
 
+    public void OnReload(InputAction.CallbackContext context)
+    {
+        ReloadPress?.Invoke();
+    }
+
     public void EnableInputListeners()
     {
         PlayerActionMap.Interact.performed += OnInteract;
@@ -113,6 +120,8 @@ public class PlayerInputHandler : MonoBehaviour
         PlayerActionMap.Attack.started += OnAttack;
 
         PlayerActionMap.Attack.canceled += OnAttack;
+
+        PlayerActionMap.Reload.started += OnReload;
     }
 
     public void DisableInputListeners()
@@ -122,5 +131,7 @@ public class PlayerInputHandler : MonoBehaviour
         PlayerActionMap.Attack.started -= OnAttack;
 
         PlayerActionMap.Attack.canceled -= OnAttack;
+
+        PlayerActionMap.Reload.started -= OnReload;
     }
 }

@@ -7,6 +7,8 @@ public class SemiAutoSO : WeaponBehaviourSO
 {
     public override void OnTriggerPress(Weapon weapon)
     {
+        weapon.CanReload = false;
+
         if (weapon.WeaponCooldown == false)
         {
             weapon.FireProjectile();
@@ -20,6 +22,8 @@ public class SemiAutoSO : WeaponBehaviourSO
 
     public override void OnTriggerRelease(Weapon weapon)
     {
+        weapon.CanReload = true;
+
         weapon.TriggerReleaseSuccessEventInvoke();
     }
 }
