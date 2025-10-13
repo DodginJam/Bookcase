@@ -18,3 +18,4 @@ MonoBehaviour:
   <TriggerReleaseFail>k__BackingField: {fileID: 0}
   <FireProjectile>k__BackingField: {fileID: 8300000, guid: d674078621b5f8745be000841efaa27c, type: 3}
   <FireProjectileFail>k__BackingField: {fileID: 0}
+  <Reloading>k__BackingField: {fileID: 8300000, guid: 320361aade7e71747a9e009fe953aba0, type: 3}

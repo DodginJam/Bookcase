@@ -26,9 +26,29 @@ public abstract class WeaponSoundsSO : ScriptableObject
     public AudioClip FireProjectileFail
     { get; private set; }
 
-    public abstract void SetUpWeaponListeners(Weapon weapon);
+    [field: SerializeField]
+    public AudioClip Reloading
+    { get; private set; }
 
-    public abstract void RemoveWeaponListeners(Weapon weapon);
+    public virtual void SetUpWeaponListeners(Weapon weapon)
+    {
+        weapon.TriggerPullSuccessEvents += PlayTriggerPulledSuccessSound;
+        weapon.TriggerPullFailEvents += PlayTriggerPulledFailureSound;
+        weapon.TriggerReleaseSuccessEvents += PlayTriggerReleasedSuccessSound;
+        weapon.WeaponShootSuccessEvents += PlayWeaponShootSuccess;
+
+        weapon.ReloadPressEvent += PlayWeaponReload;
+    }
+
+    public virtual void RemoveWeaponListeners(Weapon weapon)
+    {
+        weapon.TriggerPullSuccessEvents -= PlayTriggerPulledSuccessSound;
+        weapon.TriggerPullFailEvents -= PlayTriggerPulledFailureSound;
+        weapon.TriggerReleaseSuccessEvents -= PlayTriggerReleasedSuccessSound;
+        weapon.WeaponShootSuccessEvents -= PlayWeaponShootSuccess;
+
+        weapon.ReloadPressEvent -= PlayWeaponReload;
+    }
 
     public void PlayTriggerPulledSuccessSound(Weapon weapon)
     {
@@ -58,5 +78,10 @@ public abstract class WeaponSoundsSO : ScriptableObject
     public void PlayWeaponShootFail(Weapon weapon)
     {
         weapon.SoundEmitter.PlayOneShot(FireProjectileFail);
+    }
+
+    public void PlayWeaponReload(Weapon weapon)
+    {
+        weapon.SoundEmitter.PlayOneShot(Reloading);
     }
 }

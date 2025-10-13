@@ -5,23 +5,11 @@ public class SemiAutoSoundSO : WeaponSoundsSO
 {
     public override void SetUpWeaponListeners(Weapon weapon)
     {
-        weapon.TriggerPullSuccessEvents += PlayTriggerPulledSuccessSound;
-
-        weapon.TriggerPullFailEvents += PlayTriggerPulledFailureSound;
-
-        weapon.TriggerReleaseSuccessEvents += PlayTriggerReleasedSuccessSound;
-
-        weapon.WeaponShootSuccessEvents += PlayWeaponShootSuccess;
+        base.SetUpWeaponListeners(weapon);
     }
 
     public override void RemoveWeaponListeners(Weapon weapon)
     {
-        weapon.TriggerPullSuccessEvents -= PlayTriggerPulledSuccessSound;
-
-        weapon.TriggerPullFailEvents -= PlayTriggerPulledFailureSound;
-
-        weapon.TriggerReleaseSuccessEvents -= PlayTriggerReleasedSuccessSound;
-
-        weapon.WeaponShootSuccessEvents -= PlayWeaponShootSuccess;
+        base.RemoveWeaponListeners(weapon);
     }
 }

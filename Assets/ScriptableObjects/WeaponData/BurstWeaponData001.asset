@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: BurstWeaponData001
   m_EditorClassIdentifier: 
   <FireRatePerSecond>k__BackingField: 0.4
-  <ReloadTime>k__BackingField: 3
+  <ReloadTime>k__BackingField: 3.15
   <AmmoClipSize>k__BackingField: 21
   <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: e752af5db4a485d4293c4235a77d10d6, type: 2}
   <SoundsSO>k__BackingField: {fileID: 11400000, guid: 6fa1426c317dbba428c92894289612c2, type: 2}

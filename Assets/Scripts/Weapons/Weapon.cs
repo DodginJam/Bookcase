@@ -7,7 +7,7 @@ using static IInteractable;
 [DefaultExecutionOrder(-1)]
 public class Weapon : MonoBehaviour, IInteractable
 {
-    [field: SerializeField, Header("Weapon WeaponData Properties")]
+    [field: SerializeField, Header("Weapon Properties")]
     public WeaponDataSO WeaponData
     { get; set; }
 
@@ -89,13 +89,15 @@ public class Weapon : MonoBehaviour, IInteractable
     public bool IsReloading
     { get; set; } = false;
 
-    private bool canReload;
+    /// <summary>
+    /// Falg to track is the weapon is able to be reloaded or is considered busy.
+    /// </summary>
     public bool CanReload
-    { 
-        get { return canReload; }
-        set { canReload = value; Debug.Log($"Can Reload {value}"); }
-    }
+    { get; set; }
 
+    /// <summary>
+    /// Reference to the coroutine that tracks the reload timing.
+    /// </summary>
     public Coroutine ReloadCoroutine
     { get; set; }
 

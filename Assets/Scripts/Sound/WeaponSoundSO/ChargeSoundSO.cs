@@ -9,35 +9,26 @@ public class ChargeSoundSO : WeaponSoundsSO
 
     public override void SetUpWeaponListeners(Weapon weapon)
     {
-        weapon.TriggerPullSuccessEvents += PlayTriggerPulledSuccessSound;
+        base.SetUpWeaponListeners(weapon);
+
         weapon.TriggerPullSuccessEvents += PlayWeaponCharge;
-
-        weapon.TriggerPullFailEvents += PlayTriggerPulledFailureSound;
-
-        weapon.TriggerReleaseSuccessEvents += PlayTriggerReleasedSuccessSound;
         weapon.TriggerReleaseSuccessEvents += EndWeaponCharge;
 
         weapon.TriggerReleaseFailEvents += PlayTriggerReleasedFailSound;
         weapon.TriggerReleaseFailEvents += EndWeaponCharge;
-
-        weapon.WeaponShootSuccessEvents += PlayWeaponShootSuccess;
         weapon.WeaponShootFailEvents += PlayWeaponShootFail;
     }
 
     public override void RemoveWeaponListeners(Weapon weapon)
     {
-        weapon.TriggerPullSuccessEvents -= PlayTriggerPulledSuccessSound;
+        base.RemoveWeaponListeners(weapon);
+
         weapon.TriggerPullSuccessEvents -= PlayWeaponCharge;
 
-        weapon.TriggerPullFailEvents -= PlayTriggerPulledFailureSound;
-
-        weapon.TriggerReleaseSuccessEvents -= PlayTriggerReleasedSuccessSound;
         weapon.TriggerReleaseSuccessEvents -= EndWeaponCharge;
 
         weapon.TriggerReleaseFailEvents -= PlayTriggerReleasedFailSound;
         weapon.TriggerReleaseFailEvents -= EndWeaponCharge;
-
-        weapon.WeaponShootSuccessEvents -= PlayWeaponShootSuccess;
         weapon.WeaponShootFailEvents -= PlayWeaponShootFail;
     }
 

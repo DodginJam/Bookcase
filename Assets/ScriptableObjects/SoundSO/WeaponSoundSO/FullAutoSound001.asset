@@ -15,5 +15,7 @@ MonoBehaviour:
   <TriggerPull>k__BackingField: {fileID: 8300000, guid: f8308e80e8057a84f940ef6d92d3d176, type: 3}
   <TriggerPullFail>k__BackingField: {fileID: 8300000, guid: 04bfd28e3781ede409bbdcefa4759f79, type: 3}
   <TriggerRelease>k__BackingField: {fileID: 8300000, guid: 9f2362ecf937fa940a8fb5da50c08452, type: 3}
+  <TriggerReleaseFail>k__BackingField: {fileID: 0}
   <FireProjectile>k__BackingField: {fileID: 8300000, guid: d674078621b5f8745be000841efaa27c, type: 3}
-  <BackingFire>k__BackingField: {fileID: 0}
+  <FireProjectileFail>k__BackingField: {fileID: 0}
+  <Reloading>k__BackingField: {fileID: 8300000, guid: f419a62a8d389f840b9fc7a18cb8b9bb, type: 3}
