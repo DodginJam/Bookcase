@@ -89,7 +89,7 @@ public class Weapon : MonoBehaviour, IInteractable
     public bool IsReloading
     { get; set; } = false;
 
-    public bool canReload;
+    private bool canReload;
     public bool CanReload
     { 
         get { return canReload; }

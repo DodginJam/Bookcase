@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   <FireRatePerSecond>k__BackingField: 0.25
   <ReloadTime>k__BackingField: 1
-  <AmmoClipSize>k__BackingField: 1
-  <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: e752af5db4a485d4293c4235a77d10d6, type: 2}
-  <SoundsSO>k__BackingField: {fileID: 11400000, guid: 6fa1426c317dbba428c92894289612c2, type: 2}
+  <AmmoClipSize>k__BackingField: 3
+  <WeaponBehaviour>k__BackingField: {fileID: 11400000, guid: ea855993eba67524bbdc481d6d6e256c, type: 2}
+  <SoundsSO>k__BackingField: {fileID: 11400000, guid: 278bf6a8b626f8741b1bf16e9caeda65, type: 2}
   <ChargeTime>k__BackingField: 2.14
   <BurstNumberOfShots>k__BackingField: 3
   <BurstShotFireRate>k__BackingField: 0.1
