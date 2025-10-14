@@ -85,7 +85,7 @@ public class Inventory : MonoBehaviour
     {
         // Remove the object from the handlocation and its heirarchy.
         ObjectInHand.transform.parent = null;
-        ObjectInHand.transform.SetPositionAndRotation(positionToPlace, Quaternion.identity);
+        ObjectInHand.transform.SetPositionAndRotation(positionToPlace, Quaternion.Euler(ObjectInHand.transform.localEulerAngles.x, ObjectInHand.transform.localEulerAngles.y, ObjectInHand.transform.localEulerAngles.z));
 
         // Once the object is out of hand, choose to re-enable any physics for the Rigidbody if present.
         if (ObjectInHand.TryGetComponent<Rigidbody>(out Rigidbody rigidbody) && enablePhysicsForRigidBody)

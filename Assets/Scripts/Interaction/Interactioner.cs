@@ -88,8 +88,8 @@ public class Interactioner : MonoBehaviour
             if (Inventory.ObjectInHand != null)
             {
                 if (Physics.Raycast(ReturnRay(), out RaycastHit hit, DropObjectDistance))
-                {
-                    Inventory.TryRemoveObjectFromHand(true, true, hit.point);
+                {                                                               // Adds a little bit of room to prevent ground clipping.
+                    Inventory.TryRemoveObjectFromHand(true, true, hit.point + (Vector3.up * 0.25f));
                 }
                 else
                 {
