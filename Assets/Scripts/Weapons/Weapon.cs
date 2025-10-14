@@ -136,6 +136,25 @@ public class Weapon : MonoBehaviour, IInteractable
     { get; set; }
 
 
+    [field: SerializeField, Header("Weapon Look At")]
+    public float DistanceMin
+    { get; private set; } = 10;
+
+    [field: SerializeField]
+    public float DistanceMax
+    { get; private set; } = 200;
+
+    public Vector3 LookAtPoint 
+    { get; private set; } = Vector3.zero;
+
+    [field: SerializeField]
+    public float RotationSpeed 
+    { get; private set; } = 100f;
+
+    public bool IsHeld
+    { get; set; }
+
+
     [field: SerializeField, Header("Interaction")]
     public float InteractionDistance
     { get; set; }
@@ -244,6 +263,47 @@ public class Weapon : MonoBehaviour, IInteractable
                 WeaponCooldown = false;
             }
         }
+
+        // This only works the the object has been flagged as held by the player.
+        if (IsHeld && transform.parent != null)
+        {
+            if (Physics.Raycast(Camera.main.transform.position, Camera.main.transform.forward, out RaycastHit hitInfo, DistanceMax))
+            {
+                float distanceToPoint = Vector3.Distance(transform.position, hitInfo.point);
+
+                if (distanceToPoint <= DistanceMin)
+                {
+                    LookAtPoint = Camera.main.transform.position + (Camera.main.transform.forward * DistanceMin);
+                }
+                else if (distanceToPoint >= DistanceMax)
+                {
+                    LookAtPoint = Camera.main.transform.position + (Camera.main.transform.forward * DistanceMin);
+                }
+                else
+                {
+                    LookAtPoint = hitInfo.point;
+                }
+            }
+            else
+            {
+                LookAtPoint = Camera.main.transform.position + (Camera.main.transform.forward * DistanceMin);
+            }
+
+            Quaternion targetRotation = Quaternion.LookRotation(LookAtPoint - transform.position, transform.parent.up);
+
+            transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+        }
+
+        /*
+                if (IsHeld && transform.parent != null)
+                {
+                    LookAtPoint = Camera.main.transform.position + (Camera.main.transform.forward * DistanceMax);
+
+                    Quaternion targetRotation = Quaternion.LookRotation(LookAtPoint - transform.position, transform.parent != null ? transform.parent.up : transform.up);
+
+                    transform.rotation = Quaternion.RotateTowards(transform.rotation, targetRotation, RotationSpeed * Time.deltaTime);
+                }
+        */
     }
 
     /// <summary>

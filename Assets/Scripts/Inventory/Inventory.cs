@@ -62,6 +62,7 @@ public class Inventory : MonoBehaviour
             if (gameObject.TryGetComponent<PlayerInputHandler>(out PlayerInputHandler playerInput))
             {
                 weapon.BindInputs(playerInput);
+                weapon.IsHeld = true;
             }
         }
 
@@ -77,10 +78,10 @@ public class Inventory : MonoBehaviour
             return;
         }
 
-        RemoveObjectToHand(enablePhysicsForRigidBody, enableInteractionForInteractable, positionToPlace);
+        RemoveObjectFromHand(enablePhysicsForRigidBody, enableInteractionForInteractable, positionToPlace);
     }
 
-    public void RemoveObjectToHand(bool enablePhysicsForRigidBody, bool enableInteractionForInteractable, Vector3 positionToPlace)
+    public void RemoveObjectFromHand(bool enablePhysicsForRigidBody, bool enableInteractionForInteractable, Vector3 positionToPlace)
     {
         // Remove the object from the handlocation and its heirarchy.
         ObjectInHand.transform.parent = null;
@@ -104,6 +105,7 @@ public class Inventory : MonoBehaviour
             if (gameObject.TryGetComponent<PlayerInputHandler>(out PlayerInputHandler playerInput))
             {
                 weapon.RemoveInputs(playerInput);
+                weapon.IsHeld = false;
             }
         }
 

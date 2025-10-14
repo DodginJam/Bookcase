@@ -238,7 +238,7 @@ public class PlayerController : MonoBehaviour
         // Debugging
         /*      
         Debug.DrawLine(transform.position, sphereCastOrigin, Color.red); // The origin point of the sphere cast from the transform centre.
-        Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max distance.
+        Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max DistanceMax.
         Debug.Log($"Is Grounded: {isGrounded}");
         */
     }
