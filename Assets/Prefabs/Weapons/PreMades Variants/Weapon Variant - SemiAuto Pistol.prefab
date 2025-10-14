@@ -12,6 +12,10 @@ PrefabInstance:
       propertyPath: <WeaponData>k__BackingField
       value: 
       objectReference: {fileID: 11400000, guid: d6b19cf02c23b6e4988cf48da1efe75c, type: 2}
+    - target: {fileID: 2109867767328264149, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
+      propertyPath: <ProjectilePrefab>k__BackingField
+      value: 
+      objectReference: {fileID: 4494283735170767927, guid: 9c70fd8ee62e7114fbfde7089fa91ae4, type: 3}
     - target: {fileID: 2195040733696000727, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_LocalPosition.y
       value: 0.1132
