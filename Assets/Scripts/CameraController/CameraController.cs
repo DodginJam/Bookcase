@@ -1,5 +1,6 @@
 using UnityEngine;
 
+[DefaultExecutionOrder(50)]
 public class CameraController : MonoBehaviour
 {
     public Camera PlayerCamera
@@ -61,12 +62,14 @@ public class CameraController : MonoBehaviour
     {
         if (CameraPosition == CameraPositionState.FirstPerson)
         {
+            // Update the pitch of the camera holder object before...
+            UpdateCameraHolderPitch(FirstPersonCameraHolder, CameraPosition);
+            /// ... setting the cameras position and rotation to mirror the camera holder.
             PlayerCamera.transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
-            UpdateCameraRotation(FirstPersonCameraHolder, CameraPosition);
         }
     }
 
-    public void UpdateCameraRotation(Transform cameraHolder, CameraPositionState cameraPosition)
+    public void UpdateCameraHolderPitch(Transform cameraHolder, CameraPositionState cameraPosition)
     {
         if (cameraPosition == CameraPositionState.FirstPerson)
         {
