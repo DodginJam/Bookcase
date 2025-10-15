@@ -77,11 +77,6 @@ public class Flashlight : MonoBehaviour, IInteractable, IAttachment
 
     }
 
-    private void OnValidate()
-    {
-
-    }
-
     public virtual void ToggleLight()
     {
         LightEmitter.enabled = !LightEmitter.enabled;
