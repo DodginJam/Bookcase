@@ -176,7 +176,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372314333639758474, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
       propertyPath: m_Range
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6372314333639758474, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
       propertyPath: m_Enabled
@@ -184,7 +184,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6372314333639758474, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
       propertyPath: m_Intensity
-      value: 10
+      value: 15
       objectReference: {fileID: 0}
     - target: {fileID: 6372314333639758474, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
       propertyPath: m_ColorTemperature
