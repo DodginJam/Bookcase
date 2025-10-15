@@ -19,6 +19,10 @@ public class Flashlight : MonoBehaviour, IInteractable, IAttachment
     public Light LightEmitter
     { get; set; }
 
+    [field: SerializeField]
+    public MeshRenderer BulbMesh
+    { get; set; }
+
     public bool IsHeld
     { get; set; }
 
@@ -28,10 +32,21 @@ public class Flashlight : MonoBehaviour, IInteractable, IAttachment
     public PlayerInputHandler PlayerInputHandlerLinkedToo
     { get; set; }
 
+    #region Material Colour
+    public MaterialPropertyBlock MatPropBlock
+    { get; set; }
+
+    [field: SerializeField]
+    public float EmissionIntensity
+    { get; set; }
+
+    public Color EmissionColour
+    { get; set; }
+    #endregion
+
     void Awake()
     {
         IsInterationAllowed = true;
-
 
         if (LightEmitter == null)
         {
@@ -47,7 +62,13 @@ public class Flashlight : MonoBehaviour, IInteractable, IAttachment
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        EmissionColour = BulbMesh.sharedMaterial.GetColor("_EmissionColor");
 
+        MatPropBlock = new MaterialPropertyBlock();
+
+        MatPropBlock.SetColor("_EmissionColor", EmissionColour * (EmissionIntensity / 1000));
+
+        BulbMesh.GetPropertyBlock(MatPropBlock);
     }
 
     // Update is called once per frame
@@ -56,9 +77,25 @@ public class Flashlight : MonoBehaviour, IInteractable, IAttachment
 
     }
 
-    public void ToggleLight()
+    private void OnValidate()
+    {
+
+    }
+
+    public virtual void ToggleLight()
     {
         LightEmitter.enabled = !LightEmitter.enabled;
+
+        if (LightEmitter.enabled)
+        {
+            MatPropBlock.SetColor("_EmissionColor", EmissionColour * (EmissionIntensity / 1000));
+        }
+        else
+        {
+            MatPropBlock.SetColor("_EmissionColor", Color.black);
+        }
+
+        BulbMesh.SetPropertyBlock(MatPropBlock);
     }
 
     public void BindInput(PlayerInputHandler playerInputHandler)
