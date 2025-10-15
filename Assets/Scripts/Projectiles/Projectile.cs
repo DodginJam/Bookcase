@@ -39,7 +39,7 @@ public class Projectile : MonoBehaviour, IDamaging
             }
             else
             {
-                this.gameObject.AddComponent<Rigidbody>();
+                Rigidbody = this.gameObject.AddComponent<Rigidbody>();
             }
         }
 
