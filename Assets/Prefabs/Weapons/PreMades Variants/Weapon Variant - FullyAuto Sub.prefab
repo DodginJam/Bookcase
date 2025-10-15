@@ -452,6 +452,10 @@ PrefabInstance:
       propertyPath: m_LocalPosition.y
       value: 0.1061
       objectReference: {fileID: 0}
+    - target: {fileID: 4456246880116925042, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.2784
+      objectReference: {fileID: 0}
     - target: {fileID: 5346636026113397835, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_Name
       value: Weapon Variant - FullyAuto Sub
@@ -466,7 +470,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6987763562290077771, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3
+      value: 2.686
       objectReference: {fileID: 0}
     - target: {fileID: 6987763562290077771, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_LocalPosition.y

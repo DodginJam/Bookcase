@@ -28,7 +28,9 @@ public class PlayerInputHandler : MonoBehaviour
 
     public event Action ReloadPress;
 
-    public event Action ToggleFlashlightPress;
+    public event Action ToggleFlashlightTap;
+
+    public event Action DropFlashLightHold;
 
     private void Awake()
     {
@@ -116,7 +118,14 @@ public class PlayerInputHandler : MonoBehaviour
 
     public void OnToggleFlashlight(InputAction.CallbackContext context)
     {
-        ToggleFlashlightPress?.Invoke();
+        if (context.interaction is HoldInteraction)
+        {
+            DropFlashLightHold?.Invoke();
+        }
+        else if (context.interaction is TapInteraction)
+        {
+            ToggleFlashlightTap?.Invoke();
+        }
     }
 
     public void EnableInputListeners()
@@ -129,7 +138,7 @@ public class PlayerInputHandler : MonoBehaviour
 
         PlayerActionMap.Reload.started += OnReload;
 
-        PlayerActionMap.ToggleLight.started += OnToggleFlashlight;
+        PlayerActionMap.ToggleLight.performed += OnToggleFlashlight;
     }
 
     public void DisableInputListeners()
@@ -142,6 +151,6 @@ public class PlayerInputHandler : MonoBehaviour
 
         PlayerActionMap.Reload.started -= OnReload;
 
-        PlayerActionMap.ToggleLight.started -= OnToggleFlashlight;
+        PlayerActionMap.ToggleLight.performed -= OnToggleFlashlight;
     }
 }

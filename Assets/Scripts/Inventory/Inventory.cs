@@ -28,15 +28,24 @@ public class Inventory : MonoBehaviour
         }
     }
 
-    public void TryAddObjectToHand(GameObject objectToAdd)
+    /// <summary>
+    /// Returns whether an object can be added to the hand or not. If an object can be added, the object is added to the hand and the out gameobject is null. If an object can't be added as it already is full, then the object already in hand is provided as out gameobject.
+    /// </summary>
+    /// <param name="objectToAdd"></param>
+    /// <param name="objectAlreadyInHand"></param>
+    /// <returns></returns>
+    public bool TryAddObjectToHand(GameObject objectToAdd, out GameObject objectAlreadyInHand)
     {
         if (ObjectInHand != null)
         {
             Debug.LogWarning("Hand already contained object.");
-            return;
+            objectAlreadyInHand = ObjectInHand;
+            return false;
         }
 
+        objectAlreadyInHand = null;
         AddObjectToHand(objectToAdd);
+        return true;
     }
 
     public void AddObjectToHand(GameObject objectToAdd)

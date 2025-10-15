@@ -556,6 +556,14 @@ PrefabInstance:
       propertyPath: <ProjectilePrefab>k__BackingField
       value: 
       objectReference: {fileID: 879370119285395620, guid: 3bd2658b70abf174bbdadcdfd7649242, type: 3}
+    - target: {fileID: 4456246880116925042, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.0032
+      objectReference: {fileID: 0}
+    - target: {fileID: 4456246880116925042, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0.5194
+      objectReference: {fileID: 0}
     - target: {fileID: 5346636026113397835, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_Name
       value: Weapon Variant - Charge Sniper
@@ -570,7 +578,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6987763562290077771, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.371
+      value: 3.217
       objectReference: {fileID: 0}
     - target: {fileID: 6987763562290077771, guid: 117eec429b9334f439d9cfdcc278852e, type: 3}
       propertyPath: m_LocalPosition.y

@@ -65,7 +65,7 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
 
                     GameObject removedGameObject = RemoveObjectFromContainer(true, false);
 
-                    interactioner.Inventory.TryAddObjectToHand(removedGameObject);
+                    interactioner.Inventory.TryAddObjectToHand(removedGameObject, out _);
                 }
             }
         }

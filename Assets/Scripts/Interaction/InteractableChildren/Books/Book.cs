@@ -50,7 +50,7 @@ public class Book : MonoBehaviour, IInteractable
     {
         if (interactioner.Inventory != null)
         {
-            interactioner.Inventory.TryAddObjectToHand(this.gameObject);
+            interactioner.Inventory.TryAddObjectToHand(this.gameObject, out _);
         }
     }
 
