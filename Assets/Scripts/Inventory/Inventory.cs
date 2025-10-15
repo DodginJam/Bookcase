@@ -1,5 +1,6 @@
-using UnityEngine;
 using System;
+using UnityEngine;
+using UnityEngine.InputSystem;
 
 public class Inventory : MonoBehaviour
 {
@@ -54,15 +55,11 @@ public class Inventory : MonoBehaviour
         if (objectToAdd.TryGetComponent<IInteractable>(out IInteractable interactable))
         {
             interactable.SetInteractive(false);
-        }
 
-        // If the object in the hand is of a weapon type, then add listners to the player input fire controls.
-        if (objectToAdd.TryGetComponent<Weapon>(out Weapon weapon))
-        {
             if (gameObject.TryGetComponent<PlayerInputHandler>(out PlayerInputHandler playerInput))
             {
-                weapon.BindInputs(playerInput);
-                weapon.IsHeld = true;
+                interactable.BindInput(playerInput);
+                interactable.IsHeld = true;
             }
         }
 
@@ -97,16 +94,13 @@ public class Inventory : MonoBehaviour
         if (ObjectInHand.TryGetComponent<IInteractable>(out IInteractable interactable) && enableInteractionForInteractable)
         {
             interactable.SetInteractive(true);
-        }
 
-        // If the object that was in the hand was of a weapon type, then remove listners to the player input fire controls.        
-        if (ObjectInHand.TryGetComponent<Weapon>(out Weapon weapon))
-        {
             if (gameObject.TryGetComponent<PlayerInputHandler>(out PlayerInputHandler playerInput))
             {
-                weapon.RemoveInputs(playerInput);
-                weapon.IsHeld = false;
+                interactable.IsHeld = false;
+                interactable.RemoveInput(playerInput);
             }
+
         }
 
         // Remove the object from the inventory.

@@ -28,6 +28,7 @@ public class PlayerInputHandler : MonoBehaviour
 
     public event Action ReloadPress;
 
+    public event Action ToggleFlashlightPress;
 
     private void Awake()
     {
@@ -113,6 +114,11 @@ public class PlayerInputHandler : MonoBehaviour
         ReloadPress?.Invoke();
     }
 
+    public void OnToggleFlashlight(InputAction.CallbackContext context)
+    {
+        ToggleFlashlightPress?.Invoke();
+    }
+
     public void EnableInputListeners()
     {
         PlayerActionMap.Interact.performed += OnInteract;
@@ -122,6 +128,8 @@ public class PlayerInputHandler : MonoBehaviour
         PlayerActionMap.Attack.canceled += OnAttack;
 
         PlayerActionMap.Reload.started += OnReload;
+
+        PlayerActionMap.ToggleLight.started += OnToggleFlashlight;
     }
 
     public void DisableInputListeners()
@@ -133,5 +141,7 @@ public class PlayerInputHandler : MonoBehaviour
         PlayerActionMap.Attack.canceled -= OnAttack;
 
         PlayerActionMap.Reload.started -= OnReload;
+
+        PlayerActionMap.ToggleLight.started -= OnToggleFlashlight;
     }
 }

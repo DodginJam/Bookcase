@@ -151,9 +151,6 @@ public class Weapon : MonoBehaviour, IInteractable
     public float RotationSpeed 
     { get; private set; } = 100f;
 
-    public bool IsHeld
-    { get; set; }
-
 
     [field: SerializeField, Header("Interaction")]
     public float InteractionDistance
@@ -165,6 +162,8 @@ public class Weapon : MonoBehaviour, IInteractable
 
     [field: SerializeField]
     public InteractionCentrePoint InteractionCentre
+    { get; set; }
+    public bool IsHeld
     { get; set; }
 
     public WeaponSoundEmitter SoundEmitter
@@ -407,7 +406,7 @@ public class Weapon : MonoBehaviour, IInteractable
     /// Binds the firing methods to the attack inputs.
     /// </summary>
     /// <param name="playerInputs"></param>
-    public void BindInputs(PlayerInputHandler playerInputs)
+    public void BindInput(PlayerInputHandler playerInputs)
     {
         playerInputs.AttackPress += TriggerPressed;
         playerInputs.AttackRelease += TriggerReleased;
@@ -418,7 +417,7 @@ public class Weapon : MonoBehaviour, IInteractable
     /// Un-Binds the firing methods from the attack inputs.
     /// </summary>
     /// <param name="playerInputs"></param>
-    public void RemoveInputs(PlayerInputHandler playerInputs)
+    public void RemoveInput(PlayerInputHandler playerInputs)
     {
         playerInputs.AttackPress -= TriggerPressed;
         playerInputs.AttackRelease -= TriggerReleased;

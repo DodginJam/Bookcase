@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static IInteractable;
 
@@ -15,6 +16,8 @@ public class Book : MonoBehaviour, IInteractable
     [field: SerializeField]
     public InteractionCentrePoint InteractionCentre
     { get; set; }
+    public bool IsHeld
+    { get; set; }
 
     void Awake()
     {
@@ -31,6 +34,16 @@ public class Book : MonoBehaviour, IInteractable
     void Update()
     {
         
+    }
+
+    public void BindInput(PlayerInputHandler playerInputs)
+    {
+        new NotImplementedException();
+    }
+
+    public void RemoveInput(PlayerInputHandler playerInputs)
+    {
+        new NotImplementedException();
     }
 
     public void Interaction(Interactioner interactioner)

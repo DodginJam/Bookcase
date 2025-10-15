@@ -15,9 +15,26 @@ public class Flashlight : MonoBehaviour, IInteractable
     public InteractionCentrePoint InteractionCentre
     { get; set; }
 
+    [field: SerializeField]
+    public Light LightEmitter
+    { get; set; }
+    public bool IsHeld
+    { get; set; }
+
     void Awake()
     {
         IsInterationAllowed = true;
+
+
+        if (LightEmitter == null)
+        {
+            LightEmitter = GetComponentInChildren<Light>();
+
+            if (LightEmitter == null)
+            {
+                Debug.LogWarning("The flashlight does not have a light component within it's children.");
+            }
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -30,6 +47,20 @@ public class Flashlight : MonoBehaviour, IInteractable
     void Update()
     {
 
+    }
+
+    public void ToggleLight()
+    {
+        LightEmitter.enabled = !LightEmitter.enabled;
+    }
+
+    public void BindInput(PlayerInputHandler playerInputHandler)
+    {
+        playerInputHandler.ToggleFlashlightPress += ToggleLight;
+    }
+    public void RemoveInput(PlayerInputHandler playerInputHandler)
+    {
+        playerInputHandler.ToggleFlashlightPress += ToggleLight;
     }
 
     public void Interaction(Interactioner interactioner)

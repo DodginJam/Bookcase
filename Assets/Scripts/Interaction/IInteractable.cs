@@ -8,6 +8,9 @@ public interface IInteractable
     public bool IsInterationAllowed
     { get; set; }
 
+    public bool IsHeld
+    { get; set; }
+
     public InteractionCentrePoint InteractionCentre
     { get; set; }
 
@@ -26,7 +29,7 @@ public interface IInteractable
         Interaction(interactioner);
     }
 
-    public Vector3 GetInteractionCentrePoint(RaycastHit hitInformation)
+    private Vector3 GetInteractionCentrePoint(RaycastHit hitInformation)
     {
         Vector3 interactionCentre = Vector3.zero;
 
@@ -46,6 +49,10 @@ public interface IInteractable
     {
         IsInterationAllowed = isInteractionAllowed;
     }
+
+    public abstract void BindInput(PlayerInputHandler playerInputHandler);
+
+    public abstract void RemoveInput(PlayerInputHandler playerInputHandler);
 
     public abstract void Interaction(Interactioner interactioner);
 

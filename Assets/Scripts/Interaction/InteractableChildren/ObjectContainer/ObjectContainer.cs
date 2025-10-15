@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static IInteractable;
 
@@ -12,6 +13,8 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
 
     [field: SerializeField]
     public InteractionCentrePoint InteractionCentre
+    { get; set; }
+    public bool IsHeld
     { get; set; }
 
     [field: SerializeField]
@@ -103,6 +106,15 @@ public abstract class ObjectContainer<T> : MonoBehaviour, IInteractable
         }
 
         InitialiseAndValidateContainedObjectOnAwake();
+    }
+    public void BindInput(PlayerInputHandler playerInputs)
+    {
+        new NotImplementedException();
+    }
+
+    public void RemoveInput(PlayerInputHandler playerInputs)
+    {
+        new NotImplementedException();
     }
 
     public void InitialiseAndValidateContainedObjectOnAwake()
