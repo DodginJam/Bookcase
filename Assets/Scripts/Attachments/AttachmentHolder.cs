@@ -23,6 +23,28 @@ public class AttachmentHolder : MonoBehaviour
         
     }
 
+    public void RemoveBindingsFromAttachments(PlayerInputHandler playerInputHandler)
+    {
+        foreach (AttachmentData<Flashlight> lightSlot in FlashlightList)
+        {
+            if (lightSlot.AttachmentGameObject != null)
+            {
+                lightSlot.AttachmentGameObject.RemoveInput(playerInputHandler);
+            }
+        }
+    }
+
+    public void AddBindingsFromAttachments(PlayerInputHandler playerInputHandler)
+    {
+        foreach (AttachmentData<Flashlight> lightSlot in FlashlightList)
+        {
+            if (lightSlot.AttachmentGameObject != null)
+            {
+                lightSlot.AttachmentGameObject.BindInput(playerInputHandler);
+            }
+        }
+    }
+
     public bool CheckForEmptySlot<T>(List<AttachmentData<T>> attachmentList, out AttachmentData<T> attachmentData)
     {
         attachmentData = null;

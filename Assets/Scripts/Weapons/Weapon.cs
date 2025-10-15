@@ -169,6 +169,9 @@ public class Weapon : MonoBehaviour, IInteractable
     public WeaponSoundEmitter SoundEmitter
     { get; set; }
 
+    public AttachmentHolder Attachments
+    { get; set; }
+
 
     void Awake()
     {
@@ -194,7 +197,16 @@ public class Weapon : MonoBehaviour, IInteractable
         }
         else
         {
-            gameObject.AddComponent<WeaponSoundEmitter>();
+            SoundEmitter = gameObject.AddComponent<WeaponSoundEmitter>();
+        }
+
+        if (TryGetComponent<AttachmentHolder>(out AttachmentHolder attachmentHolder))
+        {
+            Attachments = attachmentHolder;
+        }
+        else
+        {
+            Attachments = gameObject.AddComponent<AttachmentHolder>();
         }
 
         // Init of the stats from the SO reference.
@@ -411,6 +423,11 @@ public class Weapon : MonoBehaviour, IInteractable
         playerInputs.AttackPress += TriggerPressed;
         playerInputs.AttackRelease += TriggerReleased;
         playerInputs.ReloadPress += ReloadPressd;
+
+        if (Attachments != null)
+        {
+            Attachments.AddBindingsFromAttachments(playerInputs);
+        }
     }
 
     /// <summary>
@@ -425,6 +442,11 @@ public class Weapon : MonoBehaviour, IInteractable
 
         // Helps prevent issues with weapon on being dropped while firing, and being picked up again.
         IsTriggerHeld = false;
+
+        if (Attachments != null)
+        {
+            Attachments.RemoveBindingsFromAttachments(playerInputs);
+        }
     }
 
     public void TriggerPullSuccessEventInvoke()
