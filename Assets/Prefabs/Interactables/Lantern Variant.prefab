@@ -146,6 +146,10 @@ PrefabInstance:
       propertyPath: <BulbMesh>k__BackingField
       value: 
       objectReference: {fileID: 3132804349660353797}
+    - target: {fileID: 2340682827291938288, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
+      propertyPath: <EmissionIntensity>k__BackingField
+      value: 40
+      objectReference: {fileID: 0}
     - target: {fileID: 2549131906835723293, guid: 28d9fa53d85e3474698078acdb45f34c, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.066

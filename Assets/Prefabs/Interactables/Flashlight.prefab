@@ -308,7 +308,7 @@ MonoBehaviour:
   <InteractionCentre>k__BackingField: 1
   <LightEmitter>k__BackingField: {fileID: 6372314333639758474}
   <BulbMesh>k__BackingField: {fileID: 5063322573918006683}
-  <EmissionIntensity>k__BackingField: 10.4
+  <EmissionIntensity>k__BackingField: 20
 --- !u!1 &4118046499471117348
 GameObject:
   m_ObjectHideFlags: 0
