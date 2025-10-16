@@ -68,6 +68,20 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         InitialiseVariables();
+
+        CameraController cameraController = FindFirstObjectByType<CameraController>();
+
+        if (cameraController != null)
+        {
+            if (cameraController.FirstPersonCameraHolder == null)
+            {
+                AssignCameraTransformForFollow(cameraController);
+            }
+        }
+        else
+        {
+            Debug.LogError("Unable to locate a camera controller in the scene.");
+        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -244,6 +258,23 @@ public class PlayerController : MonoBehaviour
         Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max DistanceMax.
         Debug.Log($"Is Grounded: {isGrounded}");
         */
+    }
+
+    public void AssignCameraTransformForFollow(CameraController cameraController)
+    {
+        GameObject[] objectsWithTagForCamera = GameObject.FindGameObjectsWithTag("InteractionFace");
+
+        foreach(GameObject objectWithTag in objectsWithTagForCamera)
+        {
+            if (objectWithTag.transform.root.TryGetComponent<PlayerController>(out PlayerController playerController))
+            {
+                if (playerController == this)
+                {
+                    cameraController.AssignTransformToFollowForCamera(objectWithTag.transform, this);
+                    break;
+                }
+            }
+        }
     }
 
     public void AssignEventListeners()

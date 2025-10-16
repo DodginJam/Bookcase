@@ -148,6 +148,7 @@ public class Projectile : MonoBehaviour, IDamaging
 
         if (hitTransformToPass.TryGetComponent<IDamagable>(out IDamagable damagable))
         {
+            Debug.Log("Damage Taken");
             damagable.TakeDamage(Damage);
         }
 

@@ -6,7 +6,6 @@ public class CameraController : MonoBehaviour
     public Camera PlayerCamera
     {  get; private set; }
 
-    [field: SerializeField]
     public Transform FirstPersonCameraHolder
     { get; private set; }
 
@@ -46,7 +45,7 @@ public class CameraController : MonoBehaviour
 
             if (PlayerController == null)
             {
-                Debug.LogError("Unable to locate a PlayerController component in scene.");
+                Debug.Log("Unable to locate a PlayerController component in scene.");
             }
         }
     }
@@ -54,19 +53,25 @@ public class CameraController : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
     void LateUpdate()
     {
-        if (CameraPosition == CameraPositionState.FirstPerson)
+        if (CameraPosition == CameraPositionState.FirstPerson && FirstPersonCameraHolder != null)
         {
             // Update the pitch of the camera holder object before...
             UpdateCameraHolderPitch(FirstPersonCameraHolder, CameraPosition);
             /// ... setting the cameras position and rotation to mirror the camera holder.
             PlayerCamera.transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
         }
+    }
+
+    public void AssignTransformToFollowForCamera(Transform transformToFollow, PlayerController playerController)
+    {
+        PlayerController = playerController;
+        FirstPersonCameraHolder = transformToFollow;
     }
 
     public void UpdateCameraHolderPitch(Transform cameraHolder, CameraPositionState cameraPosition)
