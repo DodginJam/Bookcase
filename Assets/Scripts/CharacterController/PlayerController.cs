@@ -63,25 +63,19 @@ public class PlayerController : MonoBehaviour
     /// </summary>
     [field: SerializeField, Tooltip("The layers then count as walkable on for the IsGrounded status of the character.")]
     public LayerMask WalkableLayers
-    { get; private set; } 
+    { get; private set; }
+
+    [field: SerializeField, Header("Camera Prefab")]
+    public GameObject CameraPrefab
+    { get; private set; }
+
+    [field: SerializeField]
+    public Transform CameraFollowTransform
+    { get; private set; }
 
     private void Awake()
     {
         InitialiseVariables();
-
-        CameraController cameraController = FindFirstObjectByType<CameraController>();
-
-        if (cameraController != null)
-        {
-            if (cameraController.FirstPersonCameraHolder == null)
-            {
-                AssignCameraTransformForFollow(cameraController);
-            }
-        }
-        else
-        {
-            Debug.LogError("Unable to locate a camera controller in the scene.");
-        }
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -89,6 +83,30 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        // NEED LOGIC TO CHECK IF THIS PLAYER IS THE CURRENT CLIENT USER
+
+        // Create and initialise the camera controller.
+        if (CameraPrefab != null && FindFirstObjectByType<Camera>(FindObjectsInactive.Exclude) == null)
+        {
+            GameObject playerCamera = Instantiate(CameraPrefab);
+
+            if (CameraFollowTransform == null)
+            {
+                Debug.LogError("Transform for the camera to follow has not been assigned.");
+                return;
+            }
+
+            if (playerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
+            {
+                AssignTransformForCameraToMimic(cameraController, CameraFollowTransform);
+            }
+            else
+            {
+                Debug.LogError("The player camera does not have a camera controller script attached.");
+                return;
+            }
+        }
     }
 
     private void OnEnable()
@@ -260,21 +278,10 @@ public class PlayerController : MonoBehaviour
         */
     }
 
-    public void AssignCameraTransformForFollow(CameraController cameraController)
+    public void AssignTransformForCameraToMimic(CameraController cameraController, Transform transform)
     {
-        GameObject[] objectsWithTagForCamera = GameObject.FindGameObjectsWithTag("InteractionFace");
 
-        foreach(GameObject objectWithTag in objectsWithTagForCamera)
-        {
-            if (objectWithTag.transform.root.TryGetComponent<PlayerController>(out PlayerController playerController))
-            {
-                if (playerController == this)
-                {
-                    cameraController.AssignTransformToFollowForCamera(objectWithTag.transform, this);
-                    break;
-                }
-            }
-        }
+        cameraController.AssignTransformToFollowForCamera(transform, this);
     }
 
     public void AssignEventListeners()

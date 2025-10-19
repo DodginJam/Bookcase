@@ -3,7 +3,7 @@ using UnityEngine;
 [DefaultExecutionOrder(50)]
 public class CameraController : MonoBehaviour
 {
-    public Camera PlayerCamera
+    public Camera AttachedCamera
     {  get; private set; }
 
     public Transform FirstPersonCameraHolder
@@ -24,29 +24,14 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Reference to the player controller and the player input system contained within.
     /// </summary>
-    public PlayerController PlayerController
+    public PlayerController PlayerControllerOwner
     { get; private set; }
 
     private void Awake()
     {
-        if (PlayerCamera == null)
+        if (TryGetComponent<Camera>(out Camera camera))
         {
-            PlayerCamera = Camera.main;
-
-            if (PlayerCamera == null)
-            {
-                Debug.LogError("Unable to locate a camera component with the MainCamera tag. ");
-            }
-        }
-
-        if (PlayerController == null)
-        {
-            PlayerController = FindAnyObjectByType<PlayerController>();
-
-            if (PlayerController == null)
-            {
-                Debug.Log("Unable to locate a PlayerController component in scene.");
-            }
+            AttachedCamera = camera;
         }
     }
 
@@ -64,13 +49,13 @@ public class CameraController : MonoBehaviour
             // Update the pitch of the camera holder object before...
             UpdateCameraHolderPitch(FirstPersonCameraHolder, CameraPosition);
             /// ... setting the cameras position and rotation to mirror the camera holder.
-            PlayerCamera.transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
+            AttachedCamera.transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
         }
     }
 
     public void AssignTransformToFollowForCamera(Transform transformToFollow, PlayerController playerController)
     {
-        PlayerController = playerController;
+        PlayerControllerOwner = playerController;
         FirstPersonCameraHolder = transformToFollow;
     }
 
@@ -78,9 +63,9 @@ public class CameraController : MonoBehaviour
     {
         if (cameraPosition == CameraPositionState.FirstPerson)
         {
-            if (PlayerController != null && PlayerController.InputHandler != null)
+            if (PlayerControllerOwner != null && PlayerControllerOwner.InputHandler != null)
             {
-                CameraPitch -= PlayerController.InputHandler.RotationInput.y * Time.deltaTime * PlayerController.RotationSpeed;
+                CameraPitch -= PlayerControllerOwner.InputHandler.RotationInput.y * Time.deltaTime * PlayerControllerOwner.RotationSpeed;
                 CameraPitch = Mathf.Clamp(CameraPitch, -85, 85);
 
                 cameraHolder.transform.localRotation = Quaternion.Euler(CameraPitch, cameraHolder.transform.localRotation.y, cameraHolder.transform.localRotation.z);

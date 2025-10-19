@@ -384,6 +384,8 @@ MonoBehaviour:
   <WalkableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
+  <CameraPrefab>k__BackingField: {fileID: 3289994852912296906, guid: 7a3b3d543ee5c4842bce68a44ccf64ab, type: 3}
+  <CameraFollowTransform>k__BackingField: {fileID: 7909268755945302637}
 --- !u!114 &8861689693454985036
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,7 +440,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  GlobalObjectIdHash: 3814537474
+  GlobalObjectIdHash: 3885542156
   InScenePlacedSourceGlobalObjectIdHash: 3885542156
   DeferredDespawnTick: 0
   Ownership: 1
