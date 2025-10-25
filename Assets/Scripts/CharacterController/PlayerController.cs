@@ -83,9 +83,10 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+    }
 
-        // NEED LOGIC TO CHECK IF THIS PLAYER IS THE CURRENT CLIENT USER
-
+    public void SpawnCameraForPlayer()
+    {
         // Create and initialise the camera controller.
         if (CameraPrefab != null && FindFirstObjectByType<Camera>(FindObjectsInactive.Exclude) == null)
         {
@@ -106,6 +107,10 @@ public class PlayerController : MonoBehaviour
                 Debug.LogError("The player camera does not have a camera controller script attached.");
                 return;
             }
+        }
+        else
+        {
+            Debug.LogError("No camera prefab has been assigned and / or a camera already exists in scene.");
         }
     }
 

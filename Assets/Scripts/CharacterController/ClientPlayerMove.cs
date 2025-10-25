@@ -1,5 +1,6 @@
 using UnityEngine;
 using Unity.Netcode;
+using Unity.Services.Matchmaker.Models;
 
 public class ClientPlayerMove : NetworkBehaviour
 {
@@ -25,6 +26,7 @@ public class ClientPlayerMove : NetworkBehaviour
         if (IsOwner)
         {
             InputHandler.enabled = true;
+            PlayerController.SpawnCameraForPlayer();
         }
 
         // Only allow the player controller to be enabled on the server.
