@@ -13,10 +13,10 @@ public class PlayerInputHandler : MonoBehaviour
     { get; private set; }
 
     public Vector2 MovementInput
-    { get; private set; }
+    { get; set; }
 
     public Vector2 RotationInput
-    { get; private set; }
+    { get; set; }
 
     public event Action InteractionTap;
 
