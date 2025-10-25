@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using UnityEngine;
-using static UnityEditor.Rendering.FilterWindow;
 
 public class AttachmentHolder : MonoBehaviour
 {

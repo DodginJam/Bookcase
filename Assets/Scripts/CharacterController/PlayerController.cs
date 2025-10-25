@@ -109,6 +109,11 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void OnDestroy()
+    {
+        Destroy(GameObject.FindAnyObjectByType<Camera>().gameObject);
+    }
+
     private void OnEnable()
     {
         AssignEventListeners();
