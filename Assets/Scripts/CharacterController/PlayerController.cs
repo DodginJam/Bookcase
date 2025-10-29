@@ -119,16 +119,6 @@ public class PlayerController : MonoBehaviour
         Destroy(GameObject.FindAnyObjectByType<Camera>().gameObject);
     }
 
-    private void OnEnable()
-    {
-        AssignEventListeners();
-    }
-
-    private void OnDisable()
-    {
-        DeassignEventListeners();
-    }
-
     private void Update()
     {
         HandleMovement();
@@ -292,29 +282,5 @@ public class PlayerController : MonoBehaviour
     {
 
         cameraController.AssignTransformToFollowForCamera(transform, this);
-    }
-
-    public void AssignEventListeners()
-    {
-        if (InputHandler != null)
-        {
-            if (InteractionComp != null)
-            {
-                InputHandler.InteractionTap += InteractionComp.InteractRayCast;
-                InputHandler.InteractionHold += InteractionComp.DropObject;
-            }
-        }
-    }
-
-    public void DeassignEventListeners()
-    {
-        if (InputHandler != null)
-        {
-            if (InteractionComp != null)
-            {
-                InputHandler.InteractionTap -= InteractionComp.InteractRayCast;
-                InputHandler.InteractionHold -= InteractionComp.DropObject;
-            }
-        }
     }
 }

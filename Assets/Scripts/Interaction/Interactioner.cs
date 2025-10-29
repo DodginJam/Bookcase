@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Interactioner : MonoBehaviour
 {
+    public PlayerInputHandler InputHandler
+    { get; private set; }
+
     [field: SerializeField]
     public Transform InteractionTransform
     { get; private set; }
@@ -45,18 +48,46 @@ public class Interactioner : MonoBehaviour
                 Inventory = this.AddComponent<Inventory>();
             }
         }
+
+        if (InputHandler == null)
+        {
+            if (TryGetComponent<PlayerInputHandler>(out PlayerInputHandler inputHandler))
+            {
+                InputHandler = inputHandler;
+            }
+            else
+            {
+                Debug.LogError("Unable to locate the input handler on this component.");
+            }
+        }
     }
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    private void OnEnable()
     {
-        
+        AssignEventListeners();
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnDisable()
     {
-        
+        DeassignEventListeners();
+    }
+
+    public void AssignEventListeners()
+    {
+        if (InputHandler != null)
+        {
+            InputHandler.InteractionTap += InteractRayCast;
+            InputHandler.InteractionHold += DropObject;
+        }
+    }
+
+    public void DeassignEventListeners()
+    {
+        if (InputHandler != null)
+        {
+            InputHandler.InteractionTap -= InteractRayCast;
+            InputHandler.InteractionHold -= DropObject;
+        }
     }
 
     public void InteractRayCast()
@@ -77,6 +108,8 @@ public class Interactioner : MonoBehaviour
     public Ray ReturnRay()
     {
         Ray ray = new Ray(InteractionTransform.position, InteractionTransform.forward);
+
+        Debug.DrawRay(InteractionTransform.position, InteractionTransform.forward, Color.white, 0.5f);
 
         return ray;
     }
