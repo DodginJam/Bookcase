@@ -216,7 +216,7 @@ GameObject:
   - component: {fileID: 4914411782777059446}
   - component: {fileID: 3368268623614386149}
   m_Layer: 0
-  m_Name: PlayerModel
+  m_Name: PlayerModelAndCamera
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -310,7 +310,7 @@ GameObject:
   - component: {fileID: 2847875940152594087}
   - component: {fileID: 8255793969442400029}
   m_Layer: 0
-  m_Name: PlayerCharacter_Network
+  m_Name: PlayerCharacterRoot_Network
   m_TagString: Player
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -470,6 +470,7 @@ MonoBehaviour:
   ShowTopMostFoldoutHeaderGroup: 1
   <InputHandler>k__BackingField: {fileID: 2332832244324250909}
   <PlayerController>k__BackingField: {fileID: 564932749332264604}
+  <PredictedVisual>k__BackingField: {fileID: 3157770127830316834}
 --- !u!114 &8255793969442400029
 MonoBehaviour:
   m_ObjectHideFlags: 0
