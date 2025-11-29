@@ -88,7 +88,7 @@ public class PlayerController : MonoBehaviour
     public void SpawnCameraForPlayer()
     {
         // Create and initialise the camera controller.
-        if (CameraPrefab != null && FindFirstObjectByType<Camera>(FindObjectsInactive.Exclude) == null)
+        if (CameraPrefab != null)
         {
             GameObject playerCamera = Instantiate(CameraPrefab);
 
@@ -280,7 +280,6 @@ public class PlayerController : MonoBehaviour
 
     public void AssignTransformForCameraToMimic(CameraController cameraController, Transform transform)
     {
-
         cameraController.AssignTransformToFollowForCamera(transform, this);
     }
 }

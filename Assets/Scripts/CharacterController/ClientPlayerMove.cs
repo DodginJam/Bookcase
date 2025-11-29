@@ -38,11 +38,12 @@ public class ClientPlayerMove : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        PlayerController.SpawnCameraForPlayer();
+
         // Read input if the device is the owner only.
         if (IsOwner)
         {
             InputHandler.enabled = true;
-            PlayerController.SpawnCameraForPlayer();
         }
 
         // Only allow the player controller to be enabled on the server.
@@ -101,7 +102,7 @@ public class ClientPlayerMove : NetworkBehaviour
         }
 
         // Send the client input to the server.
-        if (IsOwner)
+        if (IsOwner && IsClient)
         {
             UpdateFromClientToServerTickTimer += Time.deltaTime;
 
