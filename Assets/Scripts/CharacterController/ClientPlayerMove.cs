@@ -1,6 +1,5 @@
-using UnityEngine;
 using Unity.Netcode;
-using Unity.Services.Matchmaker.Models;
+using UnityEngine;
 
 public class ClientPlayerMove : NetworkBehaviour
 {
@@ -38,7 +37,7 @@ public class ClientPlayerMove : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        PlayerController.SpawnCameraForPlayer();
+        SpawnCameraForPlayerRpc();
 
         // Read input if the device is the owner only.
         if (IsOwner)
@@ -50,6 +49,39 @@ public class ClientPlayerMove : NetworkBehaviour
         if (IsServer)
         {
             PlayerController.enabled = true;
+        }
+    }
+
+    [Rpc(target: SendTo.Server)]
+    public void SpawnCameraForPlayerRpc()
+    {
+        // Create and initialise the camera controller.
+        if (PlayerController.CameraPrefab != null && PlayerController.CurrentAssignedPlayerCamera == null)
+        {
+            NetworkObject playerCamera = Instantiate(PlayerController.CameraPrefab);
+            playerCamera.SpawnWithOwnership(OwnerClientId);
+
+            PlayerController.CurrentAssignedPlayerCamera = playerCamera.gameObject;
+
+            if (PlayerController.CameraFollowTransform == null)
+            {
+                Debug.LogError("Transform for the camera to follow has not been assigned.");
+                return;
+            }
+
+            if (playerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
+            {
+                PlayerController.AssignTransformForCameraToMimic(cameraController, PlayerController.CameraFollowTransform);
+            }
+            else
+            {
+                Debug.LogError("The player camera does not have a camera controller script attached.");
+                return;
+            }
+        }
+        else
+        {
+            Debug.LogError("No camera prefab has been assigned and / or a camera already exists in scene.");
         }
     }
 

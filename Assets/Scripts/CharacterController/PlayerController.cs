@@ -1,3 +1,4 @@
+using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -66,8 +67,11 @@ public class PlayerController : MonoBehaviour
     { get; private set; }
 
     [field: SerializeField, Header("Camera Prefab")]
-    public GameObject CameraPrefab
+    public NetworkObject CameraPrefab
     { get; private set; }
+
+    public GameObject CurrentAssignedPlayerCamera
+    { get; set; }
 
     [field: SerializeField]
     public Transform CameraFollowTransform
@@ -85,38 +89,10 @@ public class PlayerController : MonoBehaviour
         Cursor.visible = false;
     }
 
-    public void SpawnCameraForPlayer()
-    {
-        // Create and initialise the camera controller.
-        if (CameraPrefab != null)
-        {
-            GameObject playerCamera = Instantiate(CameraPrefab);
-
-            if (CameraFollowTransform == null)
-            {
-                Debug.LogError("Transform for the camera to follow has not been assigned.");
-                return;
-            }
-
-            if (playerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
-            {
-                AssignTransformForCameraToMimic(cameraController, CameraFollowTransform);
-            }
-            else
-            {
-                Debug.LogError("The player camera does not have a camera controller script attached.");
-                return;
-            }
-        }
-        else
-        {
-            Debug.LogError("No camera prefab has been assigned and / or a camera already exists in scene.");
-        }
-    }
-
     private void OnDestroy()
     {
-        Destroy(GameObject.FindAnyObjectByType<Camera>().gameObject);
+        Destroy(CurrentAssignedPlayerCamera);
+        CurrentAssignedPlayerCamera = null;
     }
 
     private void Update()
