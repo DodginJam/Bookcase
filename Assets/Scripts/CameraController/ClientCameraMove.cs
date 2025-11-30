@@ -80,7 +80,7 @@ public class ClientCameraMove : NetworkBehaviour
 
             if (UpdateFromServerToClientTimer >= UpdateFromServerToClientTickRate)
             {
-                UpdatePositionToClientRpc();
+                UpdatePositionToClientRpc(transform.position, transform.rotation);
 
                 UpdateFromServerToClientTimer = 0;
             }
@@ -90,12 +90,13 @@ public class ClientCameraMove : NetworkBehaviour
     [Rpc(target: SendTo.Server)]
     private void UpdateInputToServerRpc()
     {
-
+        
     }
 
     [Rpc(target: SendTo.NotAuthority)]
-    private void UpdatePositionToClientRpc()
+    private void UpdatePositionToClientRpc(Vector3 position, Quaternion rotation)
     {
-
+        transform.position = position;
+        transform.rotation = rotation;
     }
 }

@@ -49,7 +49,7 @@ public class CameraController : MonoBehaviour
             // Update the pitch of the camera holder object before...
             UpdateCameraHolderPitch(FirstPersonCameraHolder, CameraPosition);
             /// ... setting the cameras position and rotation to mirror the camera holder.
-            AttachedCamera.transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
+            transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
         }
     }
 
