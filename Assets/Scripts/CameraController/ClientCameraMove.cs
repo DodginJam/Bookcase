@@ -50,6 +50,10 @@ public class ClientCameraMove : NetworkBehaviour
 
             Debug.Log("Network Owner Object Spawned");
         }
+        else
+        {
+            Debug.Log("Network spawned object is not the owners");
+        }
 
         // The camera controller is enabled only on server.
         if (IsServer)
