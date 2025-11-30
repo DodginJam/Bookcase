@@ -55,12 +55,14 @@ public class ClientPlayerMove : NetworkBehaviour
     [Rpc(target: SendTo.Server)]
     public void SpawnCameraForPlayerRpc()
     {
-        // Create and initialise the camera controller.
+        // Create and initialise the camera controller if the current player controller has no instance camera assigned.
         if (PlayerController.CameraPrefab != null && PlayerController.CurrentAssignedPlayerCamera == null)
         {
+            // Spawn the camera as a network object locally and via the server - IMPORTANTLY ownership of the camera gameobject is transferred to the client (not authority).
             NetworkObject playerCamera = Instantiate(PlayerController.CameraPrefab);
             playerCamera.SpawnWithOwnership(OwnerClientId);
 
+            // Assign the camera to mark the player camera as assigned.
             PlayerController.CurrentAssignedPlayerCamera = playerCamera.gameObject;
 
             if (PlayerController.CameraFollowTransform == null)
@@ -130,7 +132,7 @@ public class ClientPlayerMove : NetworkBehaviour
                 PredictedVisual.transform.Rotate(PlayerController.RotationSpeed * Time.deltaTime * globalRotation);
             }
 
-            Debug.Log("Local movement");
+            // Debug.Log("Local movement");
         }
 
         // Send the client input to the server.
