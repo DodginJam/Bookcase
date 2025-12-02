@@ -29,8 +29,11 @@ public class ClientPlayerMove : NetworkBehaviour
 
     void Awake()
     {
-        InputHandler.enabled = false;
-        PlayerController.enabled = false;
+        if (NetworkManager.Singleton != null)
+        {
+            InputHandler.enabled = false;
+            PlayerController.enabled = false;
+        }
     }
 
     public override void OnNetworkSpawn()

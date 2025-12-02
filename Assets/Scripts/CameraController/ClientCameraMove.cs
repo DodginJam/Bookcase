@@ -27,10 +27,13 @@ public class ClientCameraMove : NetworkBehaviour
 
     void Awake()
     {
-        // By default, disable the camera controller, the camera and the audio listners until whether the spawned camera is determined as owned by current client or a connected client.
-        CameraControllerScript.enabled = false;
-        CameraControllerScript.AttachedCamera.enabled = false;
-        AudioListener.enabled = false;
+        if (NetworkManager.Singleton != null)
+        {
+            // By default, disable the camera controller, the camera and the audio listners until whether the spawned camera is determined as owned by current client or a connected client.
+            CameraControllerScript.enabled = false;
+            CameraControllerScript.AttachedCamera.enabled = false;
+            AudioListener.enabled = false;
+        }
     }
 
     private void Start()
