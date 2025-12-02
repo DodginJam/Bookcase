@@ -212,8 +212,8 @@ MonoBehaviour:
   <WalkableLayers>k__BackingField:
     serializedVersion: 2
     m_Bits: 64
-  <CameraPrefab>k__BackingField: {fileID: 5569830756224579345, guid: 7a3b3d543ee5c4842bce68a44ccf64ab, type: 3}
-  <CameraFollowTransform>k__BackingField: {fileID: 718343325649599074}
+  <CameraPrefab>k__BackingField: {fileID: 3289994852912296906, guid: 7a3b3d543ee5c4842bce68a44ccf64ab, type: 3}
+  <PlayerCameraLead>k__BackingField: {fileID: 718343325649599074}
 --- !u!114 &8861689693454985036
 MonoBehaviour:
   m_ObjectHideFlags: 0

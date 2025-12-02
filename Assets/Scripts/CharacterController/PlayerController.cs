@@ -67,14 +67,14 @@ public class PlayerController : MonoBehaviour
     { get; private set; }
 
     [field: SerializeField, Header("Camera Prefab")]
-    public NetworkObject CameraPrefab
+    public GameObject CameraPrefab
     { get; private set; }
 
-    public GameObject CurrentAssignedPlayerCamera
+    public GameObject AssignedPlayerCamera
     { get; set; }
 
     [field: SerializeField]
-    public Transform CameraFollowTransform
+    public Transform PlayerCameraLead
     { get; private set; }
 
     private void Awake()
@@ -87,12 +87,63 @@ public class PlayerController : MonoBehaviour
     {
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+
+        SpawnPlayerCamera();
+    }
+
+    public void SpawnPlayerCamera()
+    {
+        if (CameraPrefab != null && AssignedPlayerCamera == null)
+        {
+            // If it is a multiplayer situation, ensure the camera is spawned on the server as a network object via a ToServer RPC.
+            if (NetworkManager.Singleton != null)
+            {
+                if (TryGetComponent<ClientPlayerMove>(out ClientPlayerMove clientPlayerMove))
+                {
+                    clientPlayerMove.SpawnPlayerCameraNetworkRpc();
+                }
+                else
+                {
+                    Debug.LogError("No player object network behaviour script of type \"ClientPlayerMove\" found on the player controller.");
+                }
+            }
+            // Else, spawn the camera as a local gameobject.
+            else
+            {
+                // Spawn the camera.
+                GameObject playerCamera = Instantiate(CameraPrefab);
+
+                // Assign the camera to mark the player camera as assigned.
+                AssignedPlayerCamera = playerCamera;
+
+                if (AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
+                {
+                    // Reference check.
+                    if (PlayerCameraLead == null)
+                    {
+                        Debug.Log("PlayerCameraLead transform has not been assigned.");
+                        return;
+                    }
+
+                    // Assign the camera variables so it knows which player controller transform point to mimic.
+                    cameraController.InitialiseCameraController(PlayerCameraLead, this);
+                }
+                else
+                {
+                    Debug.LogError("The gameobject spawned as the player camera does not have a camera controller assigned to it.");
+                }
+            }
+        }
+        else
+        {
+            Debug.Log("Camera not spawned due to lack of prefab or already assigned player camera instance.");
+        }
     }
 
     private void OnDestroy()
     {
-        Destroy(CurrentAssignedPlayerCamera);
-        CurrentAssignedPlayerCamera = null;
+        Destroy(AssignedPlayerCamera);
+        AssignedPlayerCamera = null;
     }
 
     private void Update()
@@ -252,10 +303,5 @@ public class PlayerController : MonoBehaviour
         Debug.DrawLine(sphereCastOrigin, sphereCastOrigin + Vector3.down * sphereCastMaxDistance, Color.blue); // The sphere origin to sphere max DistanceMax.
         Debug.Log($"Is Grounded: {isGrounded}");
         */
-    }
-
-    public void AssignTransformForCameraToMimic(CameraController cameraController, Transform transform)
-    {
-        cameraController.AssignTransformToFollowForCamera(transform, this);
     }
 }

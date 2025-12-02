@@ -6,7 +6,7 @@ public class CameraController : MonoBehaviour
     public Camera AttachedCamera
     {  get; private set; }
 
-    public Transform FirstPersonCameraHolder
+    public Transform TransformToFollow
     { get; private set; }
 
     /// <summary>
@@ -44,19 +44,21 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (CameraPosition == CameraPositionState.FirstPerson && FirstPersonCameraHolder != null)
+        if (CameraPosition == CameraPositionState.FirstPerson && TransformToFollow != null)
         {
             // Update the pitch of the camera holder object before...
-            UpdateCameraHolderPitch(FirstPersonCameraHolder, CameraPosition);
+            UpdateCameraHolderPitch(TransformToFollow, CameraPosition);
             /// ... setting the cameras position and rotation to mirror the camera holder.
-            transform.SetPositionAndRotation(FirstPersonCameraHolder.position, FirstPersonCameraHolder.rotation);
+            transform.SetPositionAndRotation(TransformToFollow.position, TransformToFollow.rotation);
         }
     }
 
-    public void AssignTransformToFollowForCamera(Transform transformToFollow, PlayerController playerController)
+    public void InitialiseCameraController(Transform transformForCameraToFollow, PlayerController playerController)
     {
         PlayerControllerOwner = playerController;
-        FirstPersonCameraHolder = transformToFollow;
+        TransformToFollow = transformForCameraToFollow;
+
+        Debug.Log("Player Camera initialised");
     }
 
     public void UpdateCameraHolderPitch(Transform cameraHolder, CameraPositionState cameraPosition)

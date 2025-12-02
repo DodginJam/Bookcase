@@ -37,8 +37,6 @@ public class ClientPlayerMove : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
-        SpawnCameraForPlayerRpc();
-
         // Read input if the device is the owner only.
         if (IsOwner)
         {
@@ -49,41 +47,6 @@ public class ClientPlayerMove : NetworkBehaviour
         if (IsServer)
         {
             PlayerController.enabled = true;
-        }
-    }
-
-    [Rpc(target: SendTo.Server)]
-    public void SpawnCameraForPlayerRpc()
-    {
-        // Create and initialise the camera controller if the current player controller has no instance camera assigned.
-        if (PlayerController.CameraPrefab != null && PlayerController.CurrentAssignedPlayerCamera == null)
-        {
-            // Spawn the camera as a network object locally and via the server - IMPORTANTLY ownership of the camera gameobject is transferred to the client (not authority).
-            NetworkObject playerCamera = Instantiate(PlayerController.CameraPrefab);
-            playerCamera.SpawnWithOwnership(OwnerClientId);
-
-            // Assign the camera to mark the player camera as assigned.
-            PlayerController.CurrentAssignedPlayerCamera = playerCamera.gameObject;
-
-            if (PlayerController.CameraFollowTransform == null)
-            {
-                Debug.LogError("Transform for the camera to follow has not been assigned.");
-                return;
-            }
-
-            if (playerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
-            {
-                PlayerController.AssignTransformForCameraToMimic(cameraController, PlayerController.CameraFollowTransform);
-            }
-            else
-            {
-                Debug.LogError("The player camera does not have a camera controller script attached.");
-                return;
-            }
-        }
-        else
-        {
-            Debug.LogError("No camera prefab has been assigned and / or a camera already exists in scene.");
         }
     }
 
@@ -161,5 +124,39 @@ public class ClientPlayerMove : NetworkBehaviour
                 UpdateFromServerToClientTimer = 0;
             }
         }
+    }
+
+    [Rpc(target: SendTo.Server)]
+    public void SpawnPlayerCameraNetworkRpc()
+    {
+        // Spawn the camera on the server locally.
+        GameObject playerCamera = Instantiate(PlayerController.CameraPrefab);
+
+
+
+        // Assign the camera to mark the player camera as assigned.
+        PlayerController.AssignedPlayerCamera = playerCamera;
+
+        if (PlayerController.AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
+        {
+            // Reference check.
+            if (PlayerController.PlayerCameraLead == null)
+            {
+                Debug.Log("PlayerCameraLead transform has not been assigned.");
+                return;
+            }
+
+            // Assign the camera variables so it knows which player controller transform point to mimic.
+            cameraController.InitialiseCameraController(PlayerController.PlayerCameraLead, PlayerController);
+        }
+        else
+        {
+            Debug.LogError("The gameobject spawned as the player camera does not have a camera controller assigned to it.");
+        }
+
+
+
+        NetworkObject playerCameraNetworkObject = playerCamera.GetComponent<NetworkObject>();
+        playerCameraNetworkObject.SpawnWithOwnership(OwnerClientId);
     }
 }
