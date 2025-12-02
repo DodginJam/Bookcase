@@ -35,7 +35,10 @@ public class ClientCameraMove : NetworkBehaviour
 
     private void Start()
     {
-        PlayerInput = CameraControllerScript.PlayerControllerOwner.InputHandler;
+        if (CameraControllerScript.PlayerControllerOwner != null)
+        {
+            PlayerInput = CameraControllerScript.PlayerControllerOwner.InputHandler;
+        }
     }
 
     public override void OnNetworkSpawn()
