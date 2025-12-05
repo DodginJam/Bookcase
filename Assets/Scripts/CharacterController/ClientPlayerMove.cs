@@ -129,16 +129,31 @@ public class ClientPlayerMove : NetworkBehaviour
         }
     }
 
-    [Rpc(target: SendTo.Server)]
-    public void SpawnPlayerCameraNetworkRpc()
+    /// <summary>
+    /// Ensures that the player camera is spawned on the server side only, but as a networkobject across the connected clients, and updates the server side player controller references to the camera.
+    /// </summary>
+    public void SpawnPlayerCameraNetwork()
     {
-        // Spawn the camera on the server locally.
-        GameObject playerCamera = Instantiate(PlayerController.CameraPrefab);
+        if (IsServer)
+        {
+            // Spawn the camera on the server locally.
+            GameObject playerCamera = Instantiate(PlayerController.CameraPrefab);
 
+            NetworkObject playerCameraNetworkObject = playerCamera.GetComponent<NetworkObject>();
+            playerCameraNetworkObject.SpawnWithOwnership(OwnerClientId);
 
+            UpdatePlayerController(playerCamera);
+        }
+    }
 
+    /// <summary>
+    /// Updated the player controller with the correct references to the player camera. Also sends player NetworkObject and camera NetworkObject IDs to the clients via RPC call.
+    /// </summary>
+    /// <param name="cameraObject"></param>
+    public void UpdatePlayerController(GameObject cameraObject)
+    {
         // Assign the camera to mark the player camera as assigned.
-        PlayerController.AssignedPlayerCamera = playerCamera;
+        PlayerController.AssignedPlayerCamera = cameraObject;
 
         if (PlayerController.AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
         {
@@ -151,15 +166,20 @@ public class ClientPlayerMove : NetworkBehaviour
 
             // Assign the camera variables so it knows which player controller transform point to mimic.
             cameraController.InitialiseCameraController(PlayerController.PlayerCameraLead, PlayerController);
+
+            // Get a reference to the ClientCameraMove so that an RPC to the clients with the Network IDs, to allow local references to be made with the local client side player controller and local client side camera.
+            if (cameraController.TryGetComponent<ClientCameraMove>(out ClientCameraMove clientCameraMove))
+            {
+                clientCameraMove.SendNetworkIDsToClientRpc(PlayerController.AssignedPlayerCamera.GetComponent<NetworkObject>().NetworkObjectId, PlayerController.GetComponent<NetworkObject>().NetworkObjectId);
+            }
+            else
+            {
+                Debug.LogError("camera controller does not contain client camera move script");
+            }
         }
         else
         {
             Debug.LogError("The gameobject spawned as the player camera does not have a camera controller assigned to it.");
         }
-
-
-
-        NetworkObject playerCameraNetworkObject = playerCamera.GetComponent<NetworkObject>();
-        playerCameraNetworkObject.SpawnWithOwnership(OwnerClientId);
     }
 }

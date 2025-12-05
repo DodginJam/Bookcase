@@ -24,8 +24,10 @@ public class CameraController : MonoBehaviour
     /// <summary>
     /// Reference to the player controller and the player input system contained within.
     /// </summary>
+    [field: SerializeField]
+
     public PlayerController PlayerControllerOwner
-    { get; private set; }
+    { get; set; }
 
     private void Awake()
     {

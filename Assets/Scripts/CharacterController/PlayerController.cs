@@ -100,7 +100,7 @@ public class PlayerController : MonoBehaviour
             {
                 if (TryGetComponent<ClientPlayerMove>(out ClientPlayerMove clientPlayerMove))
                 {
-                    clientPlayerMove.SpawnPlayerCameraNetworkRpc();
+                    clientPlayerMove.SpawnPlayerCameraNetwork();
                 }
                 else
                 {

@@ -1,3 +1,4 @@
+using System.Collections;
 using Unity.Netcode;
 using UnityEngine;
 
@@ -25,6 +26,12 @@ public class ClientCameraMove : NetworkBehaviour
     public float UpdateFromClientToServerTickTimer
     { get; private set; } = 0;
 
+    public ulong CameraNetworkID
+    { get; private set; } = 0;
+
+    public ulong PlayerNetworkID
+    { get; private set; } = 0;
+
     void Awake()
     {
         if (NetworkManager.Singleton != null)
@@ -44,6 +51,45 @@ public class ClientCameraMove : NetworkBehaviour
         }
     }
 
+    /// <summary>
+    /// Coroutine waits for the camera and player ID's to be received before updating the local player controller with references to the client side networked camera.
+    /// </summary>
+    /// <returns></returns>
+    IEnumerator WaitForCameraNetworkID()
+    {
+        Debug.LogWarning("Coroutine started");
+
+        bool isIDsReceived = false;
+
+        while (isIDsReceived == false)
+        {
+            if (CameraNetworkID != 0 && PlayerNetworkID != 0)
+            {
+                isIDsReceived = true;
+            }
+            else
+            {
+                yield return null;
+            }
+        }
+
+        Debug.LogWarning("Coroutine ended");
+
+        UpdateLocalPlayerController(CameraNetworkID, PlayerNetworkID);
+    }
+
+    [Rpc(target:SendTo.NotServer)]
+    public void SendNetworkIDsToClientRpc(ulong cameraNetworkID, ulong playerControlerNetworkID)
+    {
+        Debug.Log("Network IDs sent");
+
+        CameraNetworkID = cameraNetworkID;
+        PlayerNetworkID = playerControlerNetworkID;
+
+        Debug.Log($"CameraNetworkID: {CameraNetworkID}");
+        Debug.Log($"PlayerNetworkID: {PlayerNetworkID}");
+    }
+
     public override void OnNetworkSpawn()
     {
         base.OnNetworkSpawn();
@@ -55,6 +101,12 @@ public class ClientCameraMove : NetworkBehaviour
             AudioListener.enabled = true;
 
             Debug.Log("Network Owner Object Spawned");
+
+            if (!IsServer)
+            {
+                Debug.Log("Coroutine Started in IsClientCheck");
+                StartCoroutine(WaitForCameraNetworkID());
+            }
         }
         else
         {
@@ -108,5 +160,38 @@ public class ClientCameraMove : NetworkBehaviour
     {
         transform.position = position;
         transform.rotation = rotation;
+    }
+
+    /// <summary>
+    /// Taking the network IDs or the player and the camera, assign to the local player controller the correct reference for the networked camera gameobject that the server has spawned.
+    /// </summary>
+    /// <param name="cameraNetworkObjectID"></param>
+    /// <param name="playerNetworkObjectID"></param>
+    public void UpdateLocalPlayerController(ulong cameraNetworkObjectID, ulong playerNetworkObjectID)
+    {
+        GameObject clientCamera = NetworkManager.Singleton.SpawnManager.SpawnedObjects[cameraNetworkObjectID].gameObject;
+
+        GameObject clientPlayer = NetworkManager.Singleton.SpawnManager.SpawnedObjects[playerNetworkObjectID].gameObject;
+        PlayerController playerController = clientPlayer.GetComponent<PlayerController>();
+
+        // Assign the camera to mark the player camera as assigned.
+        playerController.AssignedPlayerCamera = clientCamera;
+
+        if (playerController.AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
+        {
+            // Reference check.
+            if (playerController.PlayerCameraLead == null)
+            {
+                Debug.Log("PlayerCameraLead transform has not been assigned.");
+                return;
+            }
+
+            // Assign the camera variables so it knows which player controller transform point to mimic.
+            cameraController.InitialiseCameraController(playerController.PlayerCameraLead, playerController);
+        }
+        else
+        {
+            Debug.LogError("The gameobject spawned as the player camera does not have a camera controller assigned to it.");
+        }
     }
 }
