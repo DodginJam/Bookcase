@@ -80,14 +80,14 @@ public class PlayerController : MonoBehaviour
     private void Awake()
     {
         InitialiseVariables();
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
-
         SpawnPlayerCamera();
     }
 
