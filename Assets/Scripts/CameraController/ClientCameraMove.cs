@@ -32,6 +32,9 @@ public class ClientCameraMove : NetworkBehaviour
     public ulong PlayerNetworkID
     { get; private set; } = 0;
 
+    public float PredictivePitch
+    { get; private set; }
+
     void Awake()
     {
         if (NetworkManager.Singleton != null)
@@ -122,6 +125,19 @@ public class ClientCameraMove : NetworkBehaviour
 
     private void LateUpdate()
     {
+        // Client side prediction for camera.
+        if (IsOwner && !IsServer)
+        {
+            transform.position = CameraControllerScript.TransformToFollow.position;
+            transform.rotation = CameraControllerScript.TransformToFollow.rotation;
+
+            PredictivePitch -= CameraControllerScript.PlayerControllerOwner.InputHandler.RotationInput.y * Time.deltaTime * CameraControllerScript.PlayerControllerOwner.RotationSpeed;
+
+            PredictivePitch = Mathf.Clamp(PredictivePitch, -85, 85);
+
+            CameraControllerScript.TransformToFollow.localRotation = Quaternion.Euler(PredictivePitch, CameraControllerScript.TransformToFollow.localRotation.y, CameraControllerScript.TransformToFollow.localRotation.z);
+        }
+
         // Send the client input to the server.
         if (IsOwner && IsClient)
         {
@@ -142,7 +158,7 @@ public class ClientCameraMove : NetworkBehaviour
 
             if (UpdateFromServerToClientTimer >= UpdateFromServerToClientTickRate)
             {
-                UpdatePositionToClientRpc(transform.position, transform.rotation);
+                UpdatePositionAndPitchToClientRpc(transform.position, transform.rotation, CameraControllerScript.CameraPitch);
 
                 UpdateFromServerToClientTimer = 0;
             }
@@ -156,10 +172,12 @@ public class ClientCameraMove : NetworkBehaviour
     }
 
     [Rpc(target: SendTo.NotAuthority)]
-    private void UpdatePositionToClientRpc(Vector3 position, Quaternion rotation)
+    private void UpdatePositionAndPitchToClientRpc(Vector3 position, Quaternion rotation, float pitch)
     {
         transform.position = position;
         transform.rotation = rotation;
+
+        PredictivePitch = pitch;
     }
 
     /// <summary>
