@@ -1,13 +1,12 @@
-using Unity.Netcode;
 using UnityEngine;
 
 [DefaultExecutionOrder(50)]
 public class CameraController : MonoBehaviour
 {
-    public Transform NetworkTransformToFollow
-    { get; private set; }
+    public Camera AttachedCamera
+    {  get; private set; }
 
-    public Transform LocalTransformToFollow
+    public Transform TransformToFollow
     { get; private set; }
 
     /// <summary>
@@ -32,17 +31,9 @@ public class CameraController : MonoBehaviour
 
     private void Awake()
     {
-        if (NetworkManager.Singleton != null)
+        if (TryGetComponent<Camera>(out Camera camera))
         {
-            // Assign the local camera in the client camera move script once ownership has been assigned.
-        }
-        else
-        {
-            // Find the local scene camera
-            if (Camera.main.gameObject.TryGetComponent<SceneCamera>(out SceneCamera sceneCamera))
-            {
-                sceneCamera.AssignedCameraController = this;
-            }
+            AttachedCamera = camera;
         }
     }
 
@@ -55,20 +46,19 @@ public class CameraController : MonoBehaviour
     // Update is called once per frame
     void LateUpdate()
     {
-        if (CameraPosition == CameraPositionState.FirstPerson && NetworkTransformToFollow != null)
+        if (CameraPosition == CameraPositionState.FirstPerson && TransformToFollow != null)
         {
             // Update the pitch of the camera holder object before...
-            UpdateCameraHolderPitch(NetworkTransformToFollow, CameraPosition);
+            UpdateCameraHolderPitch(TransformToFollow, CameraPosition);
             /// ... setting the cameras position and rotation to mirror the camera holder.
-            transform.SetPositionAndRotation(NetworkTransformToFollow.position, NetworkTransformToFollow.rotation);
+            transform.SetPositionAndRotation(TransformToFollow.position, TransformToFollow.rotation);
         }
     }
 
-    public void InitialiseCameraController(Transform networkTransformForCameraToFollow, Transform localTransformForCameraToFollow, PlayerController playerController)
+    public void InitialiseCameraController(Transform transformForCameraToFollow, PlayerController playerController)
     {
         PlayerControllerOwner = playerController;
-        NetworkTransformToFollow = networkTransformForCameraToFollow;
-        LocalTransformToFollow = localTransformForCameraToFollow;
+        TransformToFollow = transformForCameraToFollow;
 
         Debug.Log("Player Camera initialised");
     }

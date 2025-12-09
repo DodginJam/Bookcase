@@ -12,6 +12,10 @@ public class ClientCameraMove : NetworkBehaviour
     public PlayerInputHandler PlayerInput
     { get; private set; }
 
+    [field: SerializeField]
+    public AudioListener AudioListener
+    { get; private set; }
+
     public const float UpdateFromServerToClientTickRate = 0.05f;
 
     public float UpdateFromServerToClientTimer
@@ -37,6 +41,8 @@ public class ClientCameraMove : NetworkBehaviour
         {
             // By default, disable the camera controller, the camera and the audio listners until whether the spawned camera is determined as owned by current client or a connected client.
             CameraControllerScript.enabled = false;
+            CameraControllerScript.AttachedCamera.enabled = false;
+            AudioListener.enabled = false;
         }
     }
 
@@ -73,8 +79,6 @@ public class ClientCameraMove : NetworkBehaviour
         Debug.LogWarning("Coroutine ended");
 
         UpdateLocalPlayerController(CameraNetworkID, PlayerNetworkID);
-
-        AssignLocalCamera();
     }
 
     [Rpc(target:SendTo.NotServer)]
@@ -93,18 +97,18 @@ public class ClientCameraMove : NetworkBehaviour
     {
         base.OnNetworkSpawn();
 
+        // If the client owns this camera network behaviour, enable camera and listener - only works if the camera network behaviour has been assigned to the correct ownership upon spawn.
         if (IsOwner)
         {
+            CameraControllerScript.AttachedCamera.enabled = true;
+            AudioListener.enabled = true;
+
             Debug.Log("Network Owner Object Spawned");
 
             if (!IsServer)
             {
                 Debug.Log("Coroutine Started in IsClientCheck");
                 StartCoroutine(WaitForCameraNetworkID());
-            }
-            else
-            {
-                AssignLocalCamera();
             }
         }
         else
@@ -124,14 +128,14 @@ public class ClientCameraMove : NetworkBehaviour
         // Client side prediction for camera.
         if (IsOwner && !IsServer)
         {
-            transform.position = CameraControllerScript.NetworkTransformToFollow.position;
-            transform.rotation = CameraControllerScript.NetworkTransformToFollow.rotation;
+            transform.position = CameraControllerScript.TransformToFollow.position;
+            transform.rotation = CameraControllerScript.TransformToFollow.rotation;
 
             PredictivePitch -= CameraControllerScript.PlayerControllerOwner.InputHandler.RotationInput.y * Time.deltaTime * CameraControllerScript.PlayerControllerOwner.RotationSpeed;
 
             PredictivePitch = Mathf.Clamp(PredictivePitch, -85, 85);
 
-            CameraControllerScript.NetworkTransformToFollow.localRotation = Quaternion.Euler(PredictivePitch, CameraControllerScript.NetworkTransformToFollow.localRotation.y, CameraControllerScript.NetworkTransformToFollow.localRotation.z);
+            CameraControllerScript.TransformToFollow.localRotation = Quaternion.Euler(PredictivePitch, CameraControllerScript.TransformToFollow.localRotation.y, CameraControllerScript.TransformToFollow.localRotation.z);
         }
 
         // Send the client input to the server.
@@ -194,34 +198,18 @@ public class ClientCameraMove : NetworkBehaviour
         if (playerController.AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
         {
             // Reference check.
-            if (playerController.NetworkCameraLead == null)
+            if (playerController.PlayerCameraLead == null)
             {
-                Debug.Log("NetworkCameraLead transform has not been assigned.");
+                Debug.Log("PlayerCameraLead transform has not been assigned.");
                 return;
             }
 
             // Assign the camera variables so it knows which player controller transform point to mimic.
-            cameraController.InitialiseCameraController(playerController.NetworkCameraLead, playerController.LocalCameraLead, playerController);
+            cameraController.InitialiseCameraController(playerController.PlayerCameraLead, playerController);
         }
         else
         {
             Debug.LogError("The gameobject spawned as the player camera does not have a camera controller assigned to it.");
-        }
-    }
-
-    public void AssignLocalCamera()
-    {
-        if (IsOwner)
-        {
-            // Find the local scene camera
-            if (Camera.main.gameObject.TryGetComponent<SceneCamera>(out SceneCamera sceneCamera))
-            {
-                sceneCamera.AssignedCameraController = CameraControllerScript;
-            }
-        }
-        else
-        {
-            Debug.LogWarning("No Owner");
         }
     }
 }

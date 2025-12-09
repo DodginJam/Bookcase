@@ -74,11 +74,7 @@ public class PlayerController : MonoBehaviour
     { get; set; }
 
     [field: SerializeField]
-    public Transform NetworkCameraLead
-    { get; private set; }
-
-    [field: SerializeField]
-    public Transform LocalCameraLead
+    public Transform PlayerCameraLead
     { get; private set; }
 
     private void Awake()
@@ -123,14 +119,14 @@ public class PlayerController : MonoBehaviour
                 if (AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
                 {
                     // Reference check.
-                    if (NetworkCameraLead == null)
+                    if (PlayerCameraLead == null)
                     {
-                        Debug.Log("NetworkCameraLead transform has not been assigned.");
+                        Debug.Log("PlayerCameraLead transform has not been assigned.");
                         return;
                     }
 
                     // Assign the camera variables so it knows which player controller transform point to mimic.
-                    cameraController.InitialiseCameraController(NetworkCameraLead, LocalCameraLead, this);
+                    cameraController.InitialiseCameraController(PlayerCameraLead, this);
                 }
                 else
                 {
