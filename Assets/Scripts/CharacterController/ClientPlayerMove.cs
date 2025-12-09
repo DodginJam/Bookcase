@@ -158,14 +158,14 @@ public class ClientPlayerMove : NetworkBehaviour
         if (PlayerController.AssignedPlayerCamera.TryGetComponent<CameraController>(out CameraController cameraController))
         {
             // Reference check.
-            if (PlayerController.PlayerCameraLead == null)
+            if (PlayerController.NetworkCameraLead == null || PlayerController.LocalCameraLead == null)
             {
-                Debug.Log("PlayerCameraLead transform has not been assigned.");
+                Debug.Log("NetworkCameraLead or LocalCameraLead transform has not been assigned.");
                 return;
             }
 
             // Assign the camera variables so it knows which player controller transform point to mimic.
-            cameraController.InitialiseCameraController(PlayerController.PlayerCameraLead, PlayerController);
+            cameraController.InitialiseCameraController(PlayerController.NetworkCameraLead, PlayerController.LocalCameraLead, PlayerController);
 
             // Get a reference to the ClientCameraMove so that an RPC to the clients with the Network IDs, to allow local references to be made with the local client side player controller and local client side camera.
             if (cameraController.TryGetComponent<ClientCameraMove>(out ClientCameraMove clientCameraMove))
